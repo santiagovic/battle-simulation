@@ -1,65 +1,61 @@
+import Attack from './attack.ts'
+
 class Pokemon {
-    nome: string;
-    apelido: string;
+    name: string;
+    nickname: string;
     hp: number;
     level: number;
     item: object;
-    types: object;
-    attacks: object;
+    type: object;
+    attacks: Attack;
     stats: object;
     nature: object;
 
-    ataqueEscolhido: object;
-    pokAdversario: object;
-
-    constructor(nome: string, apelido = nome, hp, level, item, types, attacks, stats, nature) {
-        this.nome = nome;
-        this.apelido = apelido;
+    constructor(name: string, nickname = name, hp: number, level: number, item: object, type: object, attacks: Attack, stats: object, nature: object) {
+        this.name = name;
+        this.nickname = nickname;
         this.hp = hp;
         this.level = level;
-        this.types = types;
+        this.type = type;
         this.attacks = attacks;
         this.stats = stats;
         this.nature = nature;
         this.item = item;
     }
 
-    atacar(ataqueEscolhido, pokAdversario) {
-        const ataque = ataqueEscolhido;
-        const vida = pokAdversario.
-            ataqueEscolhido.valor
-
+    atacar(choosenAttack: Attack, pokeEnemie: Pokemon) {
+        const attack = choosenAttack;
+        const lifeBar = pokeEnemie.hp
+        choosenAttack
     }
-
-
 }
 
 class Nature {
-    nome: string;
-    buff: object;
-    nerf: object;
+    name: string;
+    buffStats: object;
+    nerfStats: object;
     favfood: object;
     hatedfood: object;
 
-    constructor(nome, buff, nerf, favfood, hatedfood) {
-        this.nome = nome;
-        this.buff = buff;
-        this.nerf = nerf;
+    constructor(name: string, buffStats: object, nerfStats: object, favfood: object, hatedfood: object) {
+        this.name = name;
+        this.buffStats = buffStats;
+        this.nerfStats = nerfStats;
         this.favfood = favfood;
         this.hatedfood = hatedfood;
     }
 }
 
-class Tipos {
-    nome: string;
+class Type {
+    name: string;
     symbol: object;
     superEfective: object;
     notVeryEffective: object;
     hasNoEffect: object;
     noAdvantage: object;
 
-    constructor(nome, symbol, superEfective, notVeryEffective, hasNoEffect, noAdvantage) {
-        this.nome = nome
+    constructor(name: string, symbol: object, superEfective: object, notVeryEffective: object, hasNoEffect: object, noAdvantage: object) {
+        this.name = name
         this.symbol = symbol
         this.superEfective = superEfective;
         this.notVeryEffective = notVeryEffective;
