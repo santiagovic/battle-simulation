@@ -1,6 +1,6 @@
-import Attack from './attack.ts'
+import { Attack } from './attack.ts'
 
-class Pokemon {
+export class Pokemon {
     name: string;
     nickname: string;
     hp: number;
@@ -25,12 +25,13 @@ class Pokemon {
 
     atacar(choosenAttack: Attack, pokeEnemie: Pokemon) {
         const attack = choosenAttack;
-        const lifeBar = pokeEnemie.hp
+        const lifeBar = pokeEnemie.hp;
+
         choosenAttack
     }
 }
 
-class Nature {
+export class Nature {
     name: string;
     buffStats: object;
     nerfStats: object;
@@ -46,7 +47,7 @@ class Nature {
     }
 }
 
-class Type {
+export class Type {
     name: string;
     symbol: object;
     superEfective: object;
