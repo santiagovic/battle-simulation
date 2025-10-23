@@ -1,20 +1,22 @@
-import { Attack } from './attack.js'
+import { TypesData } from '../interfaces/pokemonData'
+import { AttackData } from '../interfaces/attackData'
+import { ItemData } from '../interfaces/itemData'
+import { StatsData } from '../interfaces/pokemonData'
+import { ConditionData } from '../interfaces/pokemonData'
 
 export class Pokemon {
     name: string;
     nickname: string;
-    hp: number;
     level: number;
-    item: object;
-    type: object;
-    attacks: Attack;
-    stats: object;
+    item: ItemData;
+    type: TypesData[];
+    attacks: AttackData[];
+    stats: StatsData;
     nature: object;
 
-    constructor(name: string, nickname = name, hp: number, level: number, item: object, type: object, attacks: Attack, stats: object, nature: object) {
+    constructor(name: string, nickname:string = name, level: number, item: ItemData, type: TypesData[], attacks: AttackData[], stats: StatsData, nature: object) {
         this.name = name;
         this.nickname = nickname;
-        this.hp = hp;
         this.level = level;
         this.type = type;
         this.attacks = attacks;
@@ -23,9 +25,9 @@ export class Pokemon {
         this.item = item;
     }
 
-    atacar(choosenAttack: Attack, pokeEnemie: Pokemon) {
+    atacar(choosenAttack: AttackData, pokeEnemie: Pokemon) {
         const attack = choosenAttack;
-        const lifeBar = pokeEnemie.hp;
+        const lifeBar = pokeEnemie.stats.hp;
 
         choosenAttack
     }
@@ -47,20 +49,31 @@ export class Nature {
     }
 }
 
+//feito
 export class Type {
     name: string;
-    symbol: object;
+    symbol: string;
     superEfective: object;
     notVeryEffective: object;
     hasNoEffect: object;
     noAdvantage: object;
 
-    constructor(name: string, symbol: object, superEfective: object, notVeryEffective: object, hasNoEffect: object, noAdvantage: object) {
-        this.name = name
-        this.symbol = symbol
-        this.superEfective = superEfective;
-        this.notVeryEffective = notVeryEffective;
-        this.hasNoEffect = hasNoEffect;
-        this.noAdvantage = noAdvantage;
+    constructor(data: TypesData) {
+        this.name = data.name
+        this.symbol = data.symbol
+        this.superEfective = data.superEfective;
+        this.notVeryEffective = data.notVeryEffective;
+        this.hasNoEffect = data.hasNoEffect;
+        this.noAdvantage = data.noAdvantage;
+    }
+}
+
+export class Condition {
+    name: string;
+    effect: object;
+
+    constructor(data: ConditionData) {
+        this.name = data.name;
+        this.effect = data.effect;
     }
 }
