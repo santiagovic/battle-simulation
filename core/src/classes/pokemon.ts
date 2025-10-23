@@ -49,7 +49,6 @@ export class Nature {
     }
 }
 
-//feito
 export class Type {
     name: string;
     symbol: string;
