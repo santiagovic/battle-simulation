@@ -1,4 +1,4 @@
-import { Attack } from './attack.ts'
+import { Attack } from './attack.js'
 
 export class Pokemon {
     name: string;
