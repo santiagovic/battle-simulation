@@ -4,6 +4,7 @@ import { ItemData } from '../interfaces/itemData'
 import { StatsData } from '../interfaces/pokemonData'
 import { ConditionData } from '../interfaces/pokemonData'
 
+
 export class Pokemon {
     name: string;
     nickname: string;
