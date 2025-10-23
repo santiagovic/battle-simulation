@@ -67,6 +67,7 @@ export class Type {
     }
 }
 
+
 export class Condition {
     name: string;
     effect: object;
