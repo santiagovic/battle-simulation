@@ -7,10 +7,11 @@ export interface PokemonData {
     level: number;
     heldItem: ItemData;
     usedItem: ItemData;
-    type: object;
+    type: TypesData;
     attacks: AttackData[];
     stats: StatsData;
-    nature: object;
+    nature: NatureData;
+    ability: AbilityData;
 }
 
 export interface NatureData {

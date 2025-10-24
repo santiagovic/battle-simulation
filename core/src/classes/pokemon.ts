@@ -1,4 +1,4 @@
-import { TypesData } from '../interfaces/pokemonData'
+import { NatureData, PokemonData, TypesData } from '../interfaces/pokemonData'
 import { AttackData } from '../interfaces/attackData'
 import { ItemData } from '../interfaces/itemData'
 import { StatsData } from '../interfaces/pokemonData'
@@ -15,20 +15,20 @@ export class Pokemon {
     type: TypesData[];
     attacks: AttackData[];
     stats: StatsData;
-    nature: object;
+    nature: NatureData;
     ability: AbilityData;
 
-    constructor(name: string, nickname:string = name, level: number, heldItem: ItemData, usedItem: ItemData, type: TypesData[], attacks: AttackData[], stats: StatsData, nature: object, ability: AbilityData) {
-        this.name = name;
-        this.nickname = nickname;
-        this.level = level;
-        this.type = type;
-        this.attacks = attacks;
-        this.stats = stats;
-        this.nature = nature;
-        this.ability = ability;
-        this.heldItem = heldItem;
-        this.usedItem = usedItem;
+    constructor(data: PokemonData) {
+        this.name = data.name;
+        this.nickname = data.nickname;
+        this.level = data.level;
+        this.type = Array.isArray(data.type) ? data.type : [data.type];
+        this.attacks = data.attacks;
+        this.stats = data.stats;
+        this.nature = data.nature;
+        this.ability = data.ability;
+        this.heldItem = data.heldItem;
+        this.usedItem = data.usedItem;
     }
 
     atacar(choosenAttack: AttackData, pokeEnemie: Pokemon) {
@@ -46,12 +46,12 @@ export class Nature {
     favfood: object;
     hatedfood: object;
 
-    constructor(name: string, buffStats: object, nerfStats: object, favfood: object, hatedfood: object) {
-        this.name = name;
-        this.buffStats = buffStats;
-        this.nerfStats = nerfStats;
-        this.favfood = favfood;
-        this.hatedfood = hatedfood;
+    constructor(data: NatureData) {
+        this.name = data.name;
+        this.buffStats = data.buffStats;
+        this.nerfStats = data.nerfStats;
+        this.favfood = data.favfood;
+        this.hatedfood = data.hatedfood;
     }
 }
 
@@ -91,5 +91,6 @@ export class Ability {
     constructor(data: AbilityData){
         this.name = data.name;
         this.effect = data.effect;
+
     }
 }
