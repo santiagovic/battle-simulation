@@ -3,19 +3,22 @@ import { AttackData } from '../interfaces/attackData'
 import { ItemData } from '../interfaces/itemData'
 import { StatsData } from '../interfaces/pokemonData'
 import { ConditionData } from '../interfaces/pokemonData'
+import { AbilityData } from '../interfaces/pokemonData'
 
 
 export class Pokemon {
     name: string;
     nickname: string;
     level: number;
-    item: ItemData;
+    heldItem: ItemData;
+    usedItem: ItemData;
     type: TypesData[];
     attacks: AttackData[];
     stats: StatsData;
     nature: object;
+    ability: AbilityData;
 
-    constructor(name: string, nickname:string = name, level: number, item: ItemData, type: TypesData[], attacks: AttackData[], stats: StatsData, nature: object) {
+    constructor(name: string, nickname:string = name, level: number, heldItem: ItemData, usedItem: ItemData, type: TypesData[], attacks: AttackData[], stats: StatsData, nature: object, ability: AbilityData) {
         this.name = name;
         this.nickname = nickname;
         this.level = level;
@@ -23,7 +26,9 @@ export class Pokemon {
         this.attacks = attacks;
         this.stats = stats;
         this.nature = nature;
-        this.item = item;
+        this.ability = ability;
+        this.heldItem = heldItem;
+        this.usedItem = usedItem;
     }
 
     atacar(choosenAttack: AttackData, pokeEnemie: Pokemon) {
@@ -74,6 +79,16 @@ export class Condition {
     effect: object;
 
     constructor(data: ConditionData) {
+        this.name = data.name;
+        this.effect = data.effect;
+    }
+}
+
+export class Ability {
+    name: string;
+    effect: object;
+
+    constructor(data: AbilityData){
         this.name = data.name;
         this.effect = data.effect;
     }

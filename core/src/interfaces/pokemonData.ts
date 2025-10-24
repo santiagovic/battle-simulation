@@ -1,10 +1,12 @@
 import { AttackData } from './attackData'
+import { ItemData } from './itemData';
 
 export interface PokemonData {
     name: string;
     nickname: string;
     level: number;
-    item: object;
+    heldItem: ItemData;
+    usedItem: ItemData;
     type: object;
     attacks: AttackData[];
     stats: StatsData;
@@ -38,6 +40,11 @@ export interface StatsData {
 }
 
 export interface ConditionData {
+    name: string;
+    effect: object;
+}
+
+export interface AbilityData {
     name: string;
     effect: object;
 }
