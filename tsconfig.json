@@ -3,7 +3,10 @@
     "target": "es2017",  // or "es6", "es2016", "es2017", etc
     "lib": ["es2017", "dom"],
     "strict": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node16",
+    "module": "node16"
     // ...other options
   }
 }

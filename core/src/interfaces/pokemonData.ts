@@ -14,7 +14,7 @@ export interface PokemonData {
     habilidade: HabilidadeData;
     sprites: object;
     defeated: boolean;
-    condicoes: CondicoesData;
+    condicao?: CondicaoData;
 }
 
 export interface NaturezaData {
@@ -45,7 +45,7 @@ export interface StatusData {
     speed: number;
 }
 
-export interface CondicoesData {
+export interface CondicaoData {
     nome: string;
     effect: object;
     turnsLeft: number;

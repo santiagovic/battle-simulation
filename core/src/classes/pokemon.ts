@@ -1,6 +1,7 @@
-import { NaturezaData, PokemonData, TiposData, StatusData, CondicoesData, HabilidadeData } from '../interfaces/pokemonData'
+import { NaturezaData, PokemonData, TiposData, StatusData, CondicaoData, HabilidadeData } from '../interfaces/pokemonData'
 import { ItemData } from '../interfaces/itemData'
 import { Ataques } from './attack';
+import todosOsTipos from '../utils/tiposData';
 
 export class Pokemon {
     nome: string;
@@ -15,7 +16,7 @@ export class Pokemon {
     habilidade: Habilidade;
     sprites: object;
     defeated: boolean = false;
-    condicoes: Condicoes;
+    condicao: Condicao | null = null;
 
     constructor(data: PokemonData) {
         this.nome = data.nome;
@@ -24,12 +25,12 @@ export class Pokemon {
         this.tipo = (Array.isArray(data.tipo) ? data.tipo : [data.tipo]).map(t => new Tipos(t));
         this.ataques = (Array.isArray(data.ataques) ? data.ataques : [data.ataques]).map(a => new Ataques(a));
         this.status = data.status;
-        this.natureza = data.natureza;
-        this.habilidade = data.habilidade;
+        this.natureza = new Natureza(data.natureza);
+        this.habilidade = new Habilidade(data.habilidade);
         this.heldItem = data.heldItem;
         this.usedItem = data.usedItem;
         this.sprites = data.sprites;
-        this.condicoes = data.condicoes;
+        this.condicao = data.condicao ? new Condicao(data.condicao) : null;
     }
 
     atacar(ataqueEscolhido: number, pokeEnemie: Pokemon) {
@@ -37,45 +38,72 @@ export class Pokemon {
         let dano: number;
         let atk: number;
         let def: number;
-        let tipodoAtaque: string = ataqueSelecionado.categoria;
+        let categDoAtaque: string = ataqueSelecionado.categoria;
 
-        //verifica se o tipo do ataque é igual ao do pokemon pra add mais dano
-        let verificarTipo: boolean = this.tipo.some(tipo => tipo.nome == ataqueSelecionado.tipo.nome)
-        const stab = verificarTipo == true ? 1.5 : 1
 
         //definição se será ataque/defesa física ou especial
         if (ataqueSelecionado.pp > 0) {
             ataqueSelecionado.pp -= 1;
 
             //define o tipo de ataque e defesa a ser usado dos pokemons
-            [atk, def] = tipodoAtaque == 'physical' ? [this.status.attack, pokeEnemie.status.defense] : [this.status.spAttack, pokeEnemie.status.spDefense];
-        
+            [atk, def] = categDoAtaque == 'physical' ? [this.status.attack, pokeEnemie.status.defense] : [this.status.spAttack, pokeEnemie.status.spDefense];
 
-        //valida e executa caso ataque seja da categoria status
-        if (ataqueSelecionado.categoria === 'status') {
-            let efeito: keyof StatusData = ataqueSelecionado.efeito.statusAfetado //.propriedade do efeito (estruturar objeto effect do ataque)
-            let valorDoEfeito: number = ataqueSelecionado.efeito.valor
+            //valida e executa caso ataque seja da categoria status
+            if (ataqueSelecionado.categoria === 'status') {
+                let efeito: keyof StatusData = ataqueSelecionado.efeito.statusAfetado //.propriedade do efeito (estruturar objeto effect do ataque)
+                let valorDoEfeito: number = ataqueSelecionado.efeito.valor
 
-            this.status[efeito] += valorDoEfeito
+                this.status[efeito] += valorDoEfeito
 
-            return `Status de ${this.status[efeito]} foi aumentado.`
+                return `Status de ${this.status[efeito]} foi aumentado.`
+            }
+
+            //criar calculo de ataque baseado no level + atk + def
+
+            //ataque de dano fisico (consulta via internet para estruturar formula): ((((2 * LEVEL / 5 + 2) * ATKSTAT * ATKPOWER / DEFSTAT) / 50) + 2) * STAB * WEAKNESS_RESISTANCE * CRITICAL * OTHER * (MARGIN / 100)
+
+
+            //verifica se o tipo do ataque é igual ao do pokemon pra add mais dano
+            let tipoAtkIgualTipoPkm: boolean = this.tipo.some(tipo => tipo.nome == ataqueSelecionado.tipo.nome)
+            const stab: number = tipoAtkIgualTipoPkm == true ? 1.5 : 1
+
+            //calcula a fraqueza/resistencia
+            function calcularResistencia(tipoInimigo: Tipos[]) : number {
+                let tipodoAtaque = ataqueSelecionado.tipo;
+                let multiplicador = 1
+
+                for (let tipoDefensor of tipoInimigo) {
+                    let nomeTipoDef = tipoDefensor.nome
+
+                    if (tipodoAtaque.danoDobradoContra.includes(nomeTipoDef)) {
+                        multiplicador *=2
+                    }
+
+                    if (tipodoAtaque.metadeDanoContra.includes(nomeTipoDef)) {
+                        multiplicador *=0.5
+                    }
+
+                    if (tipodoAtaque.SemDanoContra.includes(nomeTipoDef)) {
+                        multiplicador *=0
+                    }
+                }
+
+                return multiplicador
+            }
+
+
+            if (categDoAtaque === 'physical') {
+                let calcularDanoFisico = ((((2 * this.level / 5 + 2) * atk / def) / 50) + 2) * stab * ataqueSelecionado.chanceCritico // * WEAKNESS_RESISTANCE * 
+
+                //continuar: estruturar um json com todas as resistencias e fraquezas para calcular a fraqueza do ataque
+            }
+
+
+            //retornar dano ou status
+
+            //adicionar metodo de recebimento de dano
+            //pokeEnemie.receberDano(dano)
         }
-
-        //criar calculo de ataque baseado no level + atk + def
-
-        //ataque de dano fisico (consulta via internet para estruturar formula): ((((2 * LEVEL / 5 + 2) * ATKSTAT * ATKPOWER / DEFSTAT) / 50) + 2) * STAB * WEAKNESS_RESISTANCE * CRITICAL * OTHER * (MARGIN / 100)
-        if (tipodoAtaque === 'physical') {
-            let calcularDano = ((((2 * this.level / 5 + 2) * atk / def) / 50) + 2) * stab * ataqueSelecionado.chanceCritico // * WEAKNESS_RESISTANCE * 
-
-            //continuar: estruturar um json com todas as resistencias e fraquezas para calcular a fraqueza do ataque
-        }
-
-
-        //retornar dano ou status
-
-        //adicionar metodo de recebimento de dano
-        //pokeEnemie.receberDano(dano)
-    }
     }
 
     receberDano(dano: number) {
@@ -104,8 +132,8 @@ export class Natureza {
 export class Tipos {
     nome: string;
     symbol: string;
-    danoDobradoDe: string[]; 
-    danoDobradoContra: string[]; 
+    danoDobradoDe: string[];
+    danoDobradoContra: string[];
     metadeDanoDe: string[];
     metadeDanoContra: string[];
     SemDanoDe: string[];
@@ -123,12 +151,12 @@ export class Tipos {
     }
 }
 
-export class Condicoes {
+export class Condicao {
     nome: string;
     effect: object;
     turnsLeft: number;
 
-    constructor(data: CondicoesData) {
+    constructor(data: CondicaoData) {
         this.nome = data.nome;
         this.effect = data.effect;
         this.turnsLeft = data.turnsLeft;
