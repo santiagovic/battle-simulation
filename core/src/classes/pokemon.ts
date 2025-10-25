@@ -68,34 +68,33 @@ export class Pokemon {
             const stab: number = tipoAtkIgualTipoPkm == true ? 1.5 : 1
 
             //calcula a fraqueza/resistencia
-            function calcularResistencia(tipoInimigo: Tipos[]) : number {
+            function calcularResistencia(tipoInimigo: Tipos[]): number {
                 let tipodoAtaque = ataqueSelecionado.tipo;
-                let multiplicador = 1
+                let multiplicador: number = 1
 
                 for (let tipoDefensor of tipoInimigo) {
                     let nomeTipoDef = tipoDefensor.nome
 
                     if (tipodoAtaque.danoDobradoContra.includes(nomeTipoDef)) {
-                        multiplicador *=2
+                        multiplicador *= 2
+
                     }
 
                     if (tipodoAtaque.metadeDanoContra.includes(nomeTipoDef)) {
-                        multiplicador *=0.5
+                        multiplicador *= 0.5
                     }
 
                     if (tipodoAtaque.SemDanoContra.includes(nomeTipoDef)) {
-                        multiplicador *=0
+                        multiplicador *= 0
                     }
                 }
-
                 return multiplicador
             }
 
-
             if (categDoAtaque === 'physical') {
-                let calcularDanoFisico = ((((2 * this.level / 5 + 2) * atk / def) / 50) + 2) * stab * ataqueSelecionado.chanceCritico // * WEAKNESS_RESISTANCE * 
+                let calcularDanoFisico = ((((2 * this.level / 5 + 2) * atk / def) / 50) + 2) * stab * ataqueSelecionado.chanceCritico * calcularResistencia(pokeEnemie.tipo)
 
-                //continuar: estruturar um json com todas as resistencias e fraquezas para calcular a fraqueza do ataque
+                //continuar: estruturar uma mensagem de retorno base
             }
 
 
