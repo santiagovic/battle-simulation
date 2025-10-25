@@ -53,3 +53,7 @@ export interface HabilidadeData {
     nome: string;
     effect: object;
 }
+
+export interface ResistenciaData {
+    
+}

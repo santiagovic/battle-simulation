@@ -11,11 +11,11 @@ export class Pokemon {
     tipo: Tipos[];
     ataques: Ataques[];
     status: StatusData;
-    natureza: NaturezaData;
-    habilidade: HabilidadeData;
+    natureza: Natureza;
+    habilidade: Habilidade;
     sprites: object;
     defeated: boolean = false;
-    concicoes: CondicoesData = null;
+    condicoes: Condicoes;
 
     constructor(data: PokemonData) {
         this.nome = data.nome;
@@ -29,6 +29,7 @@ export class Pokemon {
         this.heldItem = data.heldItem;
         this.usedItem = data.usedItem;
         this.sprites = data.sprites;
+        this.condicoes = data.condicoes;
     }
 
     atacar(ataqueEscolhido: number, pokeEnemie: Pokemon) {
@@ -36,25 +37,45 @@ export class Pokemon {
         let dano: number;
         let atk: number;
         let def: number;
+        let tipodoAtaque: string = ataqueSelecionado.categoria;
+
+        //verifica se o tipo do ataque é igual ao do pokemon pra add mais dano
+        let verificarTipo: boolean = this.tipo.some(tipo => tipo.nome == ataqueSelecionado.tipo.nome)
+        const stab = verificarTipo == true ? 1.5 : 1
 
         //definição se será ataque/defesa física ou especial
         if (ataqueSelecionado.pp > 0) {
             ataqueSelecionado.pp -= 1;
-            [atk, def] = ataqueSelecionado.categoria == 'physical' ? [this.status.attack, pokeEnemie.status.defense] : [this.status.spAttack, pokeEnemie.status.spDefense];
-        }
 
+            //define o tipo de ataque e defesa a ser usado dos pokemons
+            [atk, def] = tipodoAtaque == 'physical' ? [this.status.attack, pokeEnemie.status.defense] : [this.status.spAttack, pokeEnemie.status.spDefense];
+        
+
+        //valida e executa caso ataque seja da categoria status
         if (ataqueSelecionado.categoria == 'status') {
             let efeito: keyof StatusData = ataqueSelecionado.efeito.statusAfetado //.propriedade do efeito (estruturar objeto effect do ataque)
             let valorDoEfeito: number = ataqueSelecionado.efeito.valor
 
             this.status[efeito] += valorDoEfeito
+
+            return `Status de ${this.status[efeito]} foi aumentado.`
         }
+
         //criar calculo de ataque baseado no level + atk + def
+
+        //ataque de dano fisico (consulta via internet para estruturar formula): ((((2 * LEVEL / 5 + 2) * ATKSTAT * ATKPOWER / DEFSTAT) / 50) + 2) * STAB * WEAKNESS_RESISTANCE * CRITICAL * OTHER * (MARGIN / 100)
+        if (tipodoAtaque = 'physical') {
+            let calcularDano = ((((2 * this.level / 5 + 2) * this.status.attack * atk / def) / 50) + 2) * stab// * WEAKNESS_RESISTANCE * ataqueSelecionado.chanceCritico 
+
+            //continuar: estruturar um json com todas as resistencias e fraquezas para calcular a fraqueza do ataque
+        }
+
 
         //retornar dano ou status
 
         //adicionar metodo de recebimento de dano
-        pokeEnemie.receberDano(dano)
+        //pokeEnemie.receberDano(dano)
+    }
     }
 
     receberDano(dano: number) {
@@ -99,7 +120,7 @@ export class Tipos {
     }
 }
 
-export class Conditicoes {
+export class Condicoes {
     nome: string;
     effect: object;
     turnsLeft: number;
