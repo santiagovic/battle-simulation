@@ -11,9 +11,10 @@ export interface PokemonData {
     ataques: AtaqueData[];
     status: StatusData;
     natureza: NaturezaData;
-    habilidade: HabilidadesData;
+    habilidade: HabilidadeData;
     sprites: object;
     defeated: boolean;
+    condicoes: CondicoesData;
 }
 
 export interface NaturezaData {
@@ -48,7 +49,7 @@ export interface CondicoesData {
     turnsLeft: number;
 }
 
-export interface HabilidadesData {
+export interface HabilidadeData {
     nome: string;
     effect: object;
 }

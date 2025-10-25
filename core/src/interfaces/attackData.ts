@@ -1,13 +1,13 @@
-import { TiposData } from './pokemonData'
+import { TiposData, StatusData } from './pokemonData'
 
 export interface AtaqueData {
-    name: string;
-    power: number;
+    nome: string;
+    poder: number;
     pp: number;
     tipo: TiposData;
-    criticalChance: number;
-    category: string;
-    effect: object;
-    position: number;
+    chanceCritico: number;
+    categoria: string;
+    efeito: {statusAfetado: keyof StatusData, valor: number};
+    posicao: number;
 }
 
