@@ -21,8 +21,8 @@ export class Pokemon {
         this.nome = data.nome;
         this.apelido = data.apelido;
         this.level = data.level;
-        this.tipo = Array.isArray(data.tipo) ? data.tipo : [data.tipo];
-        this.ataques = data.ataques;
+        this.tipo = (Array.isArray(data.tipo) ? data.tipo : [data.tipo]).map(t => new Tipos(t));
+        this.ataques = (Array.isArray(data.ataques) ? data.ataques : [data.ataques]).map(a => new Ataques(a));
         this.status = data.status;
         this.natureza = data.natureza;
         this.habilidade = data.habilidade;
@@ -52,7 +52,7 @@ export class Pokemon {
         
 
         //valida e executa caso ataque seja da categoria status
-        if (ataqueSelecionado.categoria == 'status') {
+        if (ataqueSelecionado.categoria === 'status') {
             let efeito: keyof StatusData = ataqueSelecionado.efeito.statusAfetado //.propriedade do efeito (estruturar objeto effect do ataque)
             let valorDoEfeito: number = ataqueSelecionado.efeito.valor
 
@@ -64,8 +64,8 @@ export class Pokemon {
         //criar calculo de ataque baseado no level + atk + def
 
         //ataque de dano fisico (consulta via internet para estruturar formula): ((((2 * LEVEL / 5 + 2) * ATKSTAT * ATKPOWER / DEFSTAT) / 50) + 2) * STAB * WEAKNESS_RESISTANCE * CRITICAL * OTHER * (MARGIN / 100)
-        if (tipodoAtaque = 'physical') {
-            let calcularDano = ((((2 * this.level / 5 + 2) * this.status.attack * atk / def) / 50) + 2) * stab// * WEAKNESS_RESISTANCE * ataqueSelecionado.chanceCritico 
+        if (tipodoAtaque === 'physical') {
+            let calcularDano = ((((2 * this.level / 5 + 2) * atk / def) / 50) + 2) * stab * ataqueSelecionado.chanceCritico // * WEAKNESS_RESISTANCE * 
 
             //continuar: estruturar um json com todas as resistencias e fraquezas para calcular a fraqueza do ataque
         }
@@ -79,12 +79,11 @@ export class Pokemon {
     }
 
     receberDano(dano: number) {
-        let vidaTotal = this.status.hp;
         this.status.hp -= dano
 
-        if (vidaTotal < 0) {
+        if (this.status.hp < 0) {
             this.defeated = true;
-            vidaTotal = 0;
+            this.status.hp = 0;
             return "O pokémon desmaiou."
         }
     }
@@ -105,18 +104,22 @@ export class Natureza {
 export class Tipos {
     nome: string;
     symbol: string;
-    superEfective: object;
-    notVeryEffective: object;
-    hasNoEffect: object;
-    noAdvantage: object;
+    danoDobradoDe: string[]; 
+    danoDobradoContra: string[]; 
+    metadeDanoDe: string[];
+    metadeDanoContra: string[];
+    SemDanoDe: string[];
+    SemDanoContra: string[];
 
     constructor(data: TiposData) {
         this.nome = data.nome
         this.symbol = data.symbol
-        this.superEfective = data.superEfective;
-        this.notVeryEffective = data.notVeryEffective;
-        this.hasNoEffect = data.hasNoEffect;
-        this.noAdvantage = data.noAdvantage;
+        this.danoDobradoDe = data.danoDobradoDe;
+        this.danoDobradoContra = data.danoDobradoContra;
+        this.metadeDanoDe = data.metadeDanoDe;
+        this.metadeDanoContra = data.metadeDanoContra;
+        this.SemDanoDe = data.SemDanoDe;
+        this.SemDanoContra = data.SemDanoContra;
     }
 }
 

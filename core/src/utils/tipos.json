@@ -1,0 +1,482 @@
+[
+    {
+        "nome": "normal",
+        "danoDobradoDe": [
+            "fighting"
+        ],
+        "danoDobradoContra": [],
+        "metadeDanoDe": [],
+        "metadeDanoContra": [
+            "rock",
+            "steel"
+        ],
+        "SemDanoDe": [
+            "ghost"
+        ],
+        "SemDanoContra": [
+            "ghost"
+        ]
+    },
+    {
+        "nome": "fighting",
+        "danoDobradoDe": [
+            "flying",
+            "psychic",
+            "fairy"
+        ],
+        "danoDobradoContra": [
+            "normal",
+            "rock",
+            "steel",
+            "ice",
+            "dark"
+        ],
+        "metadeDanoDe": [
+            "rock",
+            "bug",
+            "dark"
+        ],
+        "metadeDanoContra": [
+            "flying",
+            "poison",
+            "bug",
+            "psychic",
+            "fairy"
+        ],
+        "SemDanoDe": [],
+        "SemDanoContra": [
+            "ghost"
+        ]
+    },
+    {
+        "nome": "flying",
+        "danoDobradoDe": [
+            "rock",
+            "electric",
+            "ice"
+        ],
+        "danoDobradoContra": [
+            "fighting",
+            "bug",
+            "grass"
+        ],
+        "metadeDanoDe": [
+            "fighting",
+            "bug",
+            "grass"
+        ],
+        "metadeDanoContra": [
+            "rock",
+            "steel",
+            "electric"
+        ],
+        "SemDanoDe": [
+            "ground"
+        ],
+        "SemDanoContra": []
+    },
+    {
+        "nome": "poison",
+        "danoDobradoDe": [
+            "ground",
+            "psychic"
+        ],
+        "danoDobradoContra": [
+            "grass",
+            "fairy"
+        ],
+        "metadeDanoDe": [
+            "fighting",
+            "poison",
+            "bug",
+            "grass",
+            "fairy"
+        ],
+        "metadeDanoContra": [
+            "poison",
+            "ground",
+            "rock",
+            "ghost"
+        ],
+        "SemDanoDe": [],
+        "SemDanoContra": [
+            "steel"
+        ]
+    },
+    {
+        "nome": "ground",
+        "danoDobradoDe": [
+            "water",
+            "grass",
+            "ice"
+        ],
+        "danoDobradoContra": [
+            "poison",
+            "rock",
+            "steel",
+            "fire",
+            "electric"
+        ],
+        "metadeDanoDe": [
+            "poison",
+            "rock"
+        ],
+        "metadeDanoContra": [
+            "bug",
+            "grass"
+        ],
+        "SemDanoDe": [
+            "electric"
+        ],
+        "SemDanoContra": [
+            "flying"
+        ]
+    },
+    {
+        "nome": "rock",
+        "danoDobradoDe": [
+            "fighting",
+            "ground",
+            "steel",
+            "water",
+            "grass"
+        ],
+        "danoDobradoContra": [
+            "flying",
+            "bug",
+            "fire",
+            "ice"
+        ],
+        "metadeDanoDe": [
+            "normal",
+            "flying",
+            "poison",
+            "fire"
+        ],
+        "metadeDanoContra": [
+            "fighting",
+            "ground",
+            "steel"
+        ],
+        "SemDanoDe": [],
+        "SemDanoContra": []
+    },
+    {
+        "nome": "bug",
+        "danoDobradoDe": [
+            "flying",
+            "rock",
+            "fire"
+        ],
+        "danoDobradoContra": [
+            "grass",
+            "psychic",
+            "dark"
+        ],
+        "metadeDanoDe": [
+            "fighting",
+            "ground",
+            "grass"
+        ],
+        "metadeDanoContra": [
+            "fighting",
+            "flying",
+            "poison",
+            "ghost",
+            "steel",
+            "fire",
+            "fairy"
+        ],
+        "SemDanoDe": [],
+        "SemDanoContra": []
+    },
+    {
+        "nome": "ghost",
+        "danoDobradoDe": [
+            "ghost",
+            "dark"
+        ],
+        "danoDobradoContra": [
+            "ghost",
+            "psychic"
+        ],
+        "metadeDanoDe": [
+            "poison",
+            "bug"
+        ],
+        "metadeDanoContra": [
+            "dark"
+        ],
+        "SemDanoDe": [
+            "normal",
+            "fighting"
+        ],
+        "SemDanoContra": [
+            "normal"
+        ]
+    },
+    {
+        "nome": "steel",
+        "danoDobradoDe": [
+            "fighting",
+            "ground",
+            "fire"
+        ],
+        "danoDobradoContra": [
+            "rock",
+            "ice",
+            "fairy"
+        ],
+        "metadeDanoDe": [
+            "normal",
+            "flying",
+            "rock",
+            "bug",
+            "steel",
+            "grass",
+            "psychic",
+            "ice",
+            "dragon",
+            "fairy"
+        ],
+        "metadeDanoContra": [
+            "steel",
+            "fire",
+            "water",
+            "electric"
+        ],
+        "SemDanoDe": [
+            "poison"
+        ],
+        "SemDanoContra": []
+    },
+    {
+        "nome": "fire",
+        "danoDobradoDe": [
+            "ground",
+            "rock",
+            "water"
+        ],
+        "danoDobradoContra": [
+            "bug",
+            "steel",
+            "grass",
+            "ice"
+        ],
+        "metadeDanoDe": [
+            "bug",
+            "steel",
+            "fire",
+            "grass",
+            "ice",
+            "fairy"
+        ],
+        "metadeDanoContra": [
+            "rock",
+            "fire",
+            "water",
+            "dragon"
+        ],
+        "SemDanoDe": [],
+        "SemDanoContra": []
+    },
+    {
+        "nome": "normal",
+        "danoDobradoDe": [
+            "fighting"
+        ],
+        "danoDobradoContra": [],
+        "metadeDanoDe": [],
+        "metadeDanoContra": [
+            "rock",
+            "steel"
+        ],
+        "SemDanoDe": [
+            "ghost"
+        ],
+        "SemDanoContra": [
+            "ghost"
+        ]
+    },
+    {
+        "nome": "grass",
+        "danoDobradoDe": [
+            "flying",
+            "poison",
+            "bug",
+            "fire",
+            "ice"
+        ],
+        "danoDobradoContra": [
+            "ground",
+            "rock",
+            "water"
+        ],
+        "metadeDanoDe": [
+            "ground",
+            "water",
+            "grass",
+            "electric"
+        ],
+        "metadeDanoContra": [
+            "flying",
+            "poison",
+            "bug",
+            "steel",
+            "fire",
+            "grass",
+            "dragon"
+        ],
+        "SemDanoDe": [],
+        "SemDanoContra": []
+    },
+    {
+        "nome": "electric",
+        "danoDobradoDe": [
+            "ground"
+        ],
+        "danoDobradoContra": [
+            "flying",
+            "water"
+        ],
+        "metadeDanoDe": [
+            "flying",
+            "steel",
+            "electric"
+        ],
+        "metadeDanoContra": [
+            "grass",
+            "electric",
+            "dragon"
+        ],
+        "SemDanoDe": [],
+        "SemDanoContra": [
+            "ground"
+        ]
+    },
+    {
+        "nome": "psychic",
+        "danoDobradoDe": [
+            "bug",
+            "ghost",
+            "dark"
+        ],
+        "danoDobradoContra": [
+            "fighting",
+            "poison"
+        ],
+        "metadeDanoDe": [
+            "fighting",
+            "psychic"
+        ],
+        "metadeDanoContra": [
+            "steel",
+            "psychic"
+        ],
+        "SemDanoDe": [],
+        "SemDanoContra": [
+            "dark"
+        ]
+    },
+    {
+        "nome": "ice",
+        "danoDobradoDe": [
+            "fighting",
+            "rock",
+            "steel",
+            "fire"
+        ],
+        "danoDobradoContra": [
+            "flying",
+            "ground",
+            "grass",
+            "dragon"
+        ],
+        "metadeDanoDe": [
+            "ice"
+        ],
+        "metadeDanoContra": [
+            "steel",
+            "fire",
+            "water",
+            "ice"
+        ],
+        "SemDanoDe": [],
+        "SemDanoContra": []
+    },
+    {
+        "nome": "dragon",
+        "danoDobradoDe": [
+            "ice",
+            "dragon",
+            "fairy"
+        ],
+        "danoDobradoContra": [
+            "dragon"
+        ],
+        "metadeDanoDe": [
+            "fire",
+            "water",
+            "grass",
+            "electric"
+        ],
+        "metadeDanoContra": [
+            "steel"
+        ],
+        "SemDanoDe": [],
+        "SemDanoContra": [
+            "fairy"
+        ]
+    },
+    {
+        "nome": "dark",
+        "danoDobradoDe": [
+            "fighting",
+            "bug",
+            "fairy"
+        ],
+        "danoDobradoContra": [
+            "ghost",
+            "psychic"
+        ],
+        "metadeDanoDe": [
+            "ghost",
+            "dark"
+        ],
+        "metadeDanoContra": [
+            "fighting",
+            "dark",
+            "fairy"
+        ],
+        "SemDanoDe": [
+            "psychic"
+        ],
+        "SemDanoContra": []
+    },
+    {
+        "nome": "fairy",
+        "danoDobradoDe": [
+            "poison",
+            "steel"
+        ],
+        "danoDobradoContra": [
+            "fighting",
+            "dragon",
+            "dark"
+        ],
+        "metadeDanoDe": [
+            "fighting",
+            "bug",
+            "dark"
+        ],
+        "metadeDanoContra": [
+            "poison",
+            "steel",
+            "fire"
+        ],
+        "SemDanoDe": [
+            "dragon"
+        ],
+        "SemDanoContra": []
+    }
+]

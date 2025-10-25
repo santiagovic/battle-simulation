@@ -28,11 +28,13 @@ export interface NaturezaData {
 export interface TiposData {
     nome: string;
     symbol: string; //adicionar url
-    superEfective: string[];
-    notVeryEffective: string[];
-    hasNoEffect: string[];
-    noAdvantage: string[];
-}
+    danoDobradoDe: string[]; 
+    danoDobradoContra: string[]; 
+    metadeDanoDe: string[];
+    metadeDanoContra: string[];
+    SemDanoDe: string[];
+    SemDanoContra: string[];
+    }
 
 export interface StatusData {
     hp: number;
