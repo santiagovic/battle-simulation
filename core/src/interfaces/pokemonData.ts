@@ -1,29 +1,31 @@
-import { AttackData } from './attackData'
+import { AtaqueData } from './attackData'
 import { ItemData } from './itemData';
 
 export interface PokemonData {
-    name: string;
-    nickname: string;
+    nome: string;
+    apelido: string;
     level: number;
     heldItem: ItemData;
     usedItem: ItemData;
-    type: TypesData;
-    attacks: AttackData[];
-    stats: StatsData;
-    nature: NatureData;
-    ability: AbilityData;
+    tipo: TiposData;
+    ataques: AtaqueData[];
+    status: StatusData;
+    natureza: NaturezaData;
+    habilidade: HabilidadesData;
+    sprites: object;
+    defeated: boolean;
 }
 
-export interface NatureData {
-    name: string;
-    buffStats: object;
-    nerfStats: object;
+export interface NaturezaData {
+    nome: string;
+    buffStatus: object;
+    nerfStatus: object;
     favfood: object;
     hatedfood: object;
 }
 
-export interface TypesData {
-    name: string;
+export interface TiposData {
+    nome: string;
     symbol: string; //adicionar url
     superEfective: string[];
     notVeryEffective: string[];
@@ -31,7 +33,7 @@ export interface TypesData {
     noAdvantage: string[];
 }
 
-export interface StatsData {
+export interface StatusData {
     hp: number;
     attack: number;
     defense: number;
@@ -40,12 +42,13 @@ export interface StatsData {
     speed: number;
 }
 
-export interface ConditionData {
-    name: string;
+export interface CondicoesData {
+    nome: string;
     effect: object;
+    turnsLeft: number;
 }
 
-export interface AbilityData {
-    name: string;
+export interface HabilidadesData {
+    nome: string;
     effect: object;
 }

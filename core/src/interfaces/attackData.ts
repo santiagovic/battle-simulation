@@ -1,10 +1,13 @@
-import { TypesData } from './pokemonData'
+import { TiposData } from './pokemonData'
 
-export interface AttackData {
+export interface AtaqueData {
     name: string;
     power: number;
     pp: number;
-    type: TypesData;
-
+    tipo: TiposData;
+    criticalChance: number;
+    category: string;
+    effect: object;
+    position: number;
 }
 
