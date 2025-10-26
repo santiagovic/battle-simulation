@@ -5,8 +5,8 @@ export interface PokemonData {
     nome: string;
     apelido: string;
     level: number;
-    heldItem: ItemData;
-    usedItem: ItemData;
+    itemSegurado?: ItemData;
+    itemUsado?: ItemData;
     tipo: TiposData;
     ataques: AtaqueData[];
     status: StatusData;
@@ -27,7 +27,7 @@ export interface NaturezaData {
 
 export interface TiposData {
     nome: string;
-    symbol: string; //adicionar url
+    symbol: string; //adicionar url dps
     danoDobradoDe: string[]; 
     danoDobradoContra: string[]; 
     metadeDanoDe: string[];

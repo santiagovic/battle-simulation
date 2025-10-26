@@ -1,9 +1,9 @@
 import { StatusData } from "./pokemonData";
 
 export interface ItemData {
-    name: string;
-    effect: {statusAfetado: keyof StatusData, valor: number};
-    cost: number;
-    holdable: boolean;
-    consumable: boolean;
+    nome: string;
+    efeito: {statusAfetado: keyof StatusData, valor: number};
+    custo: number;
+    seguravel: boolean;
+    consumivel: boolean;
 }
