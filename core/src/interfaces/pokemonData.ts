@@ -19,19 +19,19 @@ export interface PokemonData {
 
 export interface NaturezaData {
     nome: string;
-    buffStatus: {nome: keyof StatusData, valor: number};
-    nerfStatus: {nome: keyof StatusData, valor: number};
+    buffStatus?: {nome: keyof StatusData, valor: number};
+    nerfStatus?: {nome: keyof StatusData, valor: number};
 }
 
 export interface TiposData {
     nome: string;
     symbol: string; //adicionar url dps
-    danoDobradoDe: string[]; 
-    danoDobradoContra: string[]; 
-    metadeDanoDe: string[];
-    metadeDanoContra: string[];
-    SemDanoDe: string[];
-    SemDanoContra: string[];
+    danoDobradoDe?: string[]; 
+    danoDobradoContra?: string[]; 
+    metadeDanoDe?: string[];
+    metadeDanoContra?: string[];
+    SemDanoDe?: string[];
+    SemDanoContra?: string[];
     }
 
 export interface StatusData {
@@ -52,8 +52,4 @@ export interface CondicaoData {
 export interface HabilidadeData {
     nome: string;
     efeito: {nome: keyof StatusData, valor: number};
-}
-
-export interface ResistenciaData {
-    
 }
