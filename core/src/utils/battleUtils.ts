@@ -27,5 +27,5 @@ export function calcularResistencia(ataqueSelecionado: Ataques, tipoInimigo: Tip
 //verifica se será golpe critico
 export function calcularCritico(chanceDoAtaque: number): number {
     let numAleatorio: number = Math.random() * 100;
-    return chanceDoAtaque >= numAleatorio ? 1.5 : 1.0
+    return numAleatorio < chanceDoAtaque ? 1.5 : 1
 }

@@ -1,5 +1,5 @@
 import { ItemData } from "../interfaces/itemData";
-import { StatusData } from "../interfaces/pokemonData";
+import { StatusData, TiposData } from "../interfaces/pokemonData";
 
 export class Item {
     nome: string;
@@ -7,6 +7,7 @@ export class Item {
     custo: number;
     seguravel: boolean;
     consumivel: boolean;
+    sprite: string;
 
     constructor(data: ItemData){
         this.nome = data.nome;
@@ -14,5 +15,6 @@ export class Item {
         this.custo = data.custo;
         this.seguravel = data.seguravel;
         this.consumivel = data.consumivel;
+        this.sprite = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${this.nome}.png`;
     }
 }

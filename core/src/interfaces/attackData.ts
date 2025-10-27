@@ -5,7 +5,7 @@ export interface AtaqueData {
     poder: number;
     pp: number;
     tipo: TiposData;
-    chanceCritico: number;
+    critico: number;
     categoria: string;
     efeito: {statusAfetado: keyof StatusData, valor: number};
     posicao: number;

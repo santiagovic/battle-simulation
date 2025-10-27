@@ -13,16 +13,14 @@ export interface PokemonData {
     natureza: NaturezaData;
     habilidade: HabilidadeData;
     sprites: object;
-    defeated: boolean;
+    desmaiado: boolean;
     condicao?: CondicaoData;
 }
 
 export interface NaturezaData {
     nome: string;
-    buffStatus: object;
-    nerfStatus: object;
-    favfood: object;
-    hatedfood: object;
+    buffStatus: {nome: keyof StatusData, valor: number};
+    nerfStatus: {nome: keyof StatusData, valor: number};
 }
 
 export interface TiposData {
@@ -47,13 +45,13 @@ export interface StatusData {
 
 export interface CondicaoData {
     nome: string;
-    effect: object;
-    turnsLeft: number;
+    efeito: {nome: keyof StatusData, valor: number};
+    turnosRestantes: number;
 }
 
 export interface HabilidadeData {
     nome: string;
-    effect: object;
+    efeito: {nome: keyof StatusData, valor: number};
 }
 
 export interface ResistenciaData {

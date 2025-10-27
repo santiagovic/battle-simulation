@@ -6,4 +6,5 @@ export interface ItemData {
     custo: number;
     seguravel: boolean;
     consumivel: boolean;
+    sprite: string;
 }
