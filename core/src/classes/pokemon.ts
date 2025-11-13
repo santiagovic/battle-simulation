@@ -100,8 +100,8 @@ export class Pokemon {
 
 export class Natureza {
     nome: string;
-    buffStatus: object;
-    nerfStatus: object;
+    buffStatus?: {nome: keyof StatusData, valor: number};
+    nerfStatus?: {nome: keyof StatusData, valor: number};
 
     constructor(data: NaturezaData) {
         this.nome = data.nome;
@@ -113,12 +113,12 @@ export class Natureza {
 export class Tipos {
     nome: string;
     symbol: string;
-    danoDobradoDe: string[];
-    danoDobradoContra: string[];
-    metadeDanoDe: string[];
-    metadeDanoContra: string[];
-    SemDanoDe: string[];
-    SemDanoContra: string[];
+    danoDobradoDe?: string[];
+    danoDobradoContra?: string[];
+    metadeDanoDe?: string[];
+    metadeDanoContra?: string[];
+    SemDanoDe?: string[];
+    SemDanoContra?: string[];
 
     constructor(data: TiposData) {
         this.nome = data.nome
