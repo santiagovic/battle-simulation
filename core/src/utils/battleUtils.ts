@@ -33,7 +33,7 @@ export function calcularCritico(chanceDoAtaque: number): number {
 
 
 //verifica qual velocidade é maior para definir atacante
-export function verificarVelocidade(pokemon: Pokemon, pokeInimigo: Pokemon) {
+export function PokeMaisVelozDoTurno(pokemon: Pokemon, pokeInimigo: Pokemon): Pokemon | null {
     const veloPoke: number = pokemon.status.speed;
     const veloPokeInimigo: number = pokeInimigo.status.speed;
     let maisVeloz: Pokemon | null = null;

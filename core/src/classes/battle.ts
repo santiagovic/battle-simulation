@@ -1,7 +1,7 @@
 import { Pokemon, Tipos, Natureza, Habilidade, Condicao } from "./pokemon";
 import { Item } from "./item";
 import { Ataques } from "./attack";
-import { verificarVelocidade } from "../utils/battleUtils";
+import { PokeMaisVelozDoTurno } from "../utils/battleUtils";
 
 export class Batalha {
     pokemon: Pokemon;
@@ -10,7 +10,7 @@ export class Batalha {
     itemUsado: Item;
     turno: number = 1;
 
-    constructor(pokemon: Pokemon, pokeInimigo: Pokemon, ataqueUsado: number, itemUsado: Item, turno: number){
+    constructor(pokemon: Pokemon, pokeInimigo: Pokemon, ataqueUsado: number, itemUsado: Item, turno: number) {
         this.pokemon = pokemon;
         this.pokeInimigo = pokeInimigo;
         this.ataqueUsado = ataqueUsado;
@@ -18,18 +18,18 @@ export class Batalha {
         this.turno = turno;
     }
 
-    iniciarBatalha(){//texto inicial talvez
-        }
+    iniciarBatalha() {//texto inicial talvez
+    }
 
-    turnoAtual(atacante: Pokemon, defensor: Pokemon, ataqueUsado: number){
+    turnoAtual(atacante: Pokemon, defensor: Pokemon, ataqueUsado: number) {
         //1: verifica quem ataca primeiro pela velocidade
-        const PrimeiroAtacante = verificarVelocidade(atacante,defensor);
-        if (PrimeiroAtacante){
+        const PrimeiroAtacante = PokeMaisVelozDoTurno(atacante, defensor);
+        if (PrimeiroAtacante) {
             //2: atacante usa metodo atacar
-            PrimeiroAtacante.atacar(ataqueUsado,defensor)
+            PrimeiroAtacante.atacar(ataqueUsado, defensor);
         }
 
-        
+        //problema: refatorar função que valida o poke mais veloz do turno ou criar uma nova função para verificar o poke mais lento do turno para receber o dano
         //3: defensor usa metodo receber dano
 
 
