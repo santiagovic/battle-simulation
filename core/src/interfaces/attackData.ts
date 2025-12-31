@@ -7,7 +7,8 @@ export interface AtaqueData {
     tipo: TiposData;
     critico: number;
     categoria: string;
-    efeito: {statusAfetado: keyof StatusData, valor: number};
+    efeito: {statusAfetado: keyof StatusData, valor: number, alvo: string};
     posicao: number;
+    precisao: number;
 }
 

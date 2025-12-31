@@ -44,3 +44,30 @@ export function PokeMaisVelozDoTurno(pokemon: Pokemon, pokeInimigo: Pokemon): Po
 
     return maisVeloz
 }
+
+
+export function subtrairPPdoAtacante(ataqueSelecionado: Ataques): Number {
+    return ataqueSelecionado.pp -= 1
+}
+
+
+export function definirTiposdeAtkeDef(pokeAtacante: Pokemon, pokeDefensor: Pokemon, ataqueSelecionado: Ataques): [number, number] {
+
+    return ataqueSelecionado.categoria == 'physical' ? [pokeAtacante.status.attack, pokeDefensor.status.defense] : [pokeAtacante.status.spAttack, pokeDefensor.status.spDefense]
+
+}
+
+export function aplicarStatusDoAtaque(pokeAtacante: Pokemon, pokeDefensor: Pokemon, ataqueSelecionado: Ataques) {
+    let efeito: { statusAfetado: keyof StatusData, valor: number, alvo: string } = ataqueSelecionado.efeito;
+    let valorDoEfeito: number = efeito.valor;
+    let alvoDoEfeito: string = efeito.alvo;
+
+    if (alvoDoEfeito === 'user') {
+        pokeAtacante.status[efeito.statusAfetado] += valorDoEfeito
+        return `Status de ${pokeAtacante.status[efeito.statusAfetado]} foi aumentado.`
+    }
+    else {
+        pokeDefensor.status[efeito.statusAfetado] += valorDoEfeito
+        return `Status de ${pokeDefensor.status[efeito.statusAfetado]} foi ${efeito.valor < 0 ? 'diminuido' : 'aumentado'}.`
+    }
+}

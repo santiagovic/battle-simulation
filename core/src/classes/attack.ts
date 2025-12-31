@@ -8,8 +8,9 @@ export class Ataques {
     tipo: TiposData;
     critico: number;
     categoria: string;
-    efeito: {statusAfetado: keyof StatusData, valor: number};
+    efeito: { statusAfetado: keyof StatusData, valor: number, alvo: string };
     posicao: number;
+    precisao: number;
 
     constructor(data: AtaqueData) {
         this.nome = data.nome;
@@ -18,7 +19,8 @@ export class Ataques {
         this.tipo = data.tipo;
         this.critico = data.critico;
         this.categoria = data.categoria;
-        this.efeito = { statusAfetado: data.efeito.statusAfetado, valor: data.efeito.valor };
-        this.posicao = data.posicao
+        this.efeito = { statusAfetado: data.efeito.statusAfetado, valor: data.efeito.valor, alvo: data.efeito.alvo };
+        this.posicao = data.posicao;
+        this.precisao = data.precisao;
     }
 }
