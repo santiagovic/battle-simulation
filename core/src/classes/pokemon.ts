@@ -3,7 +3,7 @@ import { ItemData } from '../interfaces/itemData'
 import { Ataques } from './attack';
 import { Item } from './item'
 
-import { calcularResistencia, calcularCritico, subtrairPPdoAtacante, definirTiposdeAtkeDef, aplicarStatusDoAtaque } from '../utils/battleUtils'
+import { verificarIgualdadeDeTipoAtkePkm, subtrairPPdoAtacante, definirTiposdeAtkeDef, aplicarStatusDoAtaque, calcularDano } from '../utils/pkmUtils'
 
 
 export class Pokemon {
@@ -35,7 +35,7 @@ export class Pokemon {
         this.condicao = data.condicao ? new Condicao(data.condicao) : null;
     }
 
-    atacar(posicaoDoAtaqueEscolhido: number, pokeEnemie: Pokemon) {
+    atacar(posicaoDoAtaqueEscolhido: number, pokeDefensor: Pokemon) {
         const ataqueSelecionado: Ataques | undefined = this.ataques.find(ataque => ataque.posicao === posicaoDoAtaqueEscolhido);
 
         if (ataqueSelecionado) {
@@ -45,28 +45,25 @@ export class Pokemon {
 
             if (ataqueSelecionado.pp > 0) {
                 subtrairPPdoAtacante(ataqueSelecionado); //refatorado para mini função
-                
+
                 if (categDoAtaque === 'physical') {
                     //definição se será ataque/defesa física ou especial
-                    [atk, def] = definirTiposdeAtkeDef(this, pokeEnemie, ataqueSelecionado);
-                
+                    [atk, def] = definirTiposdeAtkeDef(this, pokeDefensor, ataqueSelecionado);
+
                     //REFATORAR VERIFICAÇÕES ABAIXO PARA MICROFUNÇÕES (clean code)
 
 
-                    //ataque de dano fisico (consulta via internet para estruturar formula): ((((2 * LEVEL / 5 + 2) * ATKSTAT * ATKPOWER / DEFSTAT) / 50) + 2) * STAB * WEAKNESS_RESISTANCE * CRITICAL * OTHER * (MARGIN / 100)
-    
-                    //verifica se o tipo do ataque é igual ao do pokemon pra add mais dano
-                    let tipoAtkIgualTipoPkm: boolean = this.tipo.some(tipo => tipo.nome == ataqueSelecionado.tipo.nome)
-                    const stab: number = tipoAtkIgualTipoPkm == true ? 1.5 : 1
-    
-                    const dano: number = ((((2 * this.level / 5 + 2) * atk * ataqueSelecionado.poder / def) / 50) + 2) * stab * calcularCritico(ataqueSelecionado.critico) * calcularResistencia(ataqueSelecionado, pokeEnemie.tipo);
-                    pokeEnemie.receberDano(dano) //calcular variavel do itemSegurado
-                
+                    let tipoDoAtaqueIgualaoTipoPkm: boolean = verificarIgualdadeDeTipoAtkePkm(this, ataqueSelecionado);
+                    const stab: number = tipoDoAtaqueIgualaoTipoPkm == true ? 1.5 : 1
+
+                    const dano: number = calcularDano(this, pokeDefensor, ataqueSelecionado, atk, def, stab);
+                    pokeDefensor.receberDano(dano) //calcular variavel do itemSegurado
+
                 }
 
                 //valida e executa caso ataque seja da categoria status
                 else if (categDoAtaque === 'status') {
-                    aplicarStatusDoAtaque(this, pokeEnemie, ataqueSelecionado);
+                    aplicarStatusDoAtaque(this, pokeDefensor, ataqueSelecionado);
                 }
             }
         }

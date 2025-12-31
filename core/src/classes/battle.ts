@@ -18,18 +18,22 @@ export class Batalha {
         this.turno = turno;
     }
 
-    iniciarBatalha() {//texto inicial talvez
+    iniciarBatalha() {
+        //texto inicial talvez
+        
+        //1 - verificar se naturezas ou habilidades afetam status na batalha
+
+        //2 - abrir menu de opções
+
+        //3 - chamar metodo turno atual pela primeira vez
     }
 
     turnoAtual(atacante: Pokemon, defensor: Pokemon, ataqueUsado: number) {
         //1: verifica quem ataca primeiro pela velocidade
         const PrimeiroAtacante = PokeMaisVelozDoTurno(atacante, defensor);
-        if (PrimeiroAtacante) {
-            //2: atacante usa metodo atacar
-            PrimeiroAtacante.atacar(ataqueUsado, defensor);
-        }
 
-        //problema: refatorar função que valida o poke mais veloz do turno ou criar uma nova função para verificar o poke mais lento do turno para receber o dano
+            PrimeiroAtacante.atacar(ataqueUsado, defensor);
+   
         //3: defensor usa metodo receber dano
 
 
