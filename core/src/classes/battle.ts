@@ -20,7 +20,7 @@ export class Batalha {
 
     iniciarBatalha() {
         //texto inicial talvez
-        
+
         //1 - verificar se naturezas ou habilidades afetam status na batalha
 
         //2 - abrir menu de opções
@@ -32,13 +32,18 @@ export class Batalha {
         //1: verifica quem ataca primeiro pela velocidade
         const PrimeiroAtacante = PokeMaisVelozDoTurno(atacante, defensor);
 
-            PrimeiroAtacante.atacar(ataqueUsado, defensor);
-   
-        //3: defensor usa metodo receber dano
+        //2: verifica se atacante possui condicao e aplicar baseado na probabilidade
 
+        //3: atacar
+        PrimeiroAtacante.atacar(ataqueUsado, defensor);
 
+        //4: defensor usa metodo receber dano
 
+        //5: defensor ataca
 
+        //6: atacante recebe dano
+    
+        //7: fim do turno e retorna ao menu de ações (?)
     }
 
 

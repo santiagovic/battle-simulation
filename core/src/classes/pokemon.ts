@@ -44,24 +44,19 @@ export class Pokemon {
             let categDoAtaque: string = ataqueSelecionado.categoria;
 
             if (ataqueSelecionado.pp > 0) {
-                subtrairPPdoAtacante(ataqueSelecionado); //refatorado para mini função
+                subtrairPPdoAtacante(ataqueSelecionado);
 
                 if (categDoAtaque === 'physical') {
-                    //definição se será ataque/defesa física ou especial
+                   
                     [atk, def] = definirTiposdeAtkeDef(this, pokeDefensor, ataqueSelecionado);
-
-                    //REFATORAR VERIFICAÇÕES ABAIXO PARA MICROFUNÇÕES (clean code)
-
 
                     let tipoDoAtaqueIgualaoTipoPkm: boolean = verificarIgualdadeDeTipoAtkePkm(this, ataqueSelecionado);
                     const stab: number = tipoDoAtaqueIgualaoTipoPkm == true ? 1.5 : 1
 
                     const dano: number = calcularDano(this, pokeDefensor, ataqueSelecionado, atk, def, stab);
                     pokeDefensor.receberDano(dano) //calcular variavel do itemSegurado
-
                 }
 
-                //valida e executa caso ataque seja da categoria status
                 else if (categDoAtaque === 'status') {
                     aplicarStatusDoAtaque(this, pokeDefensor, ataqueSelecionado);
                 }
@@ -76,7 +71,9 @@ export class Pokemon {
             this.desmaiado = true;
             this.status.hp = 0;
             return "O pokémon desmaiou."
+            //criar e chamar metodo de encerrar batalha quando desmaiar
         }
+
     }
 
     usarItem() {
