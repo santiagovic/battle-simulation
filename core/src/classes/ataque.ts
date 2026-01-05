@@ -1,4 +1,4 @@
-import { AtaqueData } from "../interfaces/attackData";
+import { AtaqueData } from "../interfaces/ataqueData";
 import { StatusData, TiposData } from "../interfaces/pokemonData";
 
 export class Ataques {

@@ -1,9 +1,9 @@
-import { NaturezaData, PokemonData, TiposData, StatusData, CondicaoData, HabilidadeData } from '../interfaces/pokemonData'
+import { NaturezaData, PokemonData, TiposData, StatusData, CondicaoData } from '../interfaces/pokemonData'
 import { ItemData } from '../interfaces/itemData'
-import { Ataques } from './attack';
+import { Ataques } from './ataque';
 import { Item } from './item'
 
-import { verificarIgualdadeDeTipoAtkePkm, subtrairPPdoAtacante, definirTiposdeAtkeDef, aplicarStatusDoAtaque, calcularDano } from '../utils/pkmUtils'
+import { verificarIgualdadeDeTipoAtkePkm, subtrairPPdoAtacante, definirTiposdeAtkeDef, aplicarStatusDoAtaque, calcularDano } from '../utils/pokemonUtils'
 
 
 export class Pokemon {
@@ -16,7 +16,6 @@ export class Pokemon {
     ataques: Ataques[];
     status: StatusData;
     natureza: Natureza;
-    habilidade: Habilidade;
     sprites: object;
     desmaiado: boolean = false;
     condicao: Condicao | null = null;
@@ -29,7 +28,6 @@ export class Pokemon {
         this.ataques = (Array.isArray(data.ataques) ? data.ataques : [data.ataques]).map(a => new Ataques(a));
         this.status = data.status;
         this.natureza = new Natureza(data.natureza);
-        this.habilidade = new Habilidade(data.habilidade);
         this.itemSegurado = data.itemSegurado ? new Item(data.itemSegurado) : null;
         this.sprites = data.sprites;
         this.condicao = data.condicao ? new Condicao(data.condicao) : null;
@@ -47,7 +45,7 @@ export class Pokemon {
                 subtrairPPdoAtacante(ataqueSelecionado);
 
                 if (categDoAtaque === 'physical') {
-                   
+
                     [atk, def] = definirTiposdeAtkeDef(this, pokeDefensor, ataqueSelecionado);
 
                     let tipoDoAtaqueIgualaoTipoPkm: boolean = verificarIgualdadeDeTipoAtkePkm(this, ataqueSelecionado);
@@ -94,8 +92,8 @@ export class Pokemon {
 
 export class Natureza {
     nome: string;
-    buffStatus?: { nome: keyof StatusData, valor: number };
-    nerfStatus?: { nome: keyof StatusData, valor: number };
+    buffStatus: keyof StatusData | null;
+    nerfStatus: keyof StatusData | null;
 
     constructor(data: NaturezaData) {
         this.nome = data.nome;
@@ -138,12 +136,3 @@ export class Condicao {
     }
 }
 
-export class Habilidade {
-    nome: string;
-    efeito: object;
-
-    constructor(data: HabilidadeData) {
-        this.nome = data.nome;
-        this.efeito = data.efeito;
-    }
-}

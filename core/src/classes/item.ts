@@ -9,7 +9,7 @@ export class Item {
     consumivel: boolean;
     sprite: string;
 
-    constructor(data: ItemData){
+    constructor(data: ItemData) {
         this.nome = data.nome;
         this.efeito = data.efeito;
         this.custo = data.custo;

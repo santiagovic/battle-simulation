@@ -1,8 +1,8 @@
 import { Pokemon, Tipos } from "../classes/pokemon";
-import { Ataques } from "../classes/attack";
+import { Ataques } from "../classes/ataque";
 import { PokemonData, StatusData } from "../interfaces/pokemonData";
 
-//calcula a fraqueza/resistencia
+
 export function calcularResistencia(ataqueSelecionado: Ataques, tipoInimigo: Tipos[]): number {
     let tipodoAtaque = ataqueSelecionado.tipo;
     let multiplicador: number = 1
@@ -25,11 +25,12 @@ export function calcularResistencia(ataqueSelecionado: Ataques, tipoInimigo: Tip
     return multiplicador;
 }
 
-//verifica se será golpe critico
+
 export function calcularCritico(chanceDoAtaque: number): number {
     let numAleatorio: number = Math.random() * 100;
     return numAleatorio < chanceDoAtaque ? 1.5 : 1
 }
+
 
 export function subtrairPPdoAtacante(ataqueSelecionado: Ataques): Number {
     return ataqueSelecionado.pp -= 1
@@ -42,7 +43,7 @@ export function definirTiposdeAtkeDef(pokeAtacante: Pokemon, pokeDefensor: Pokem
 
 }
 
-export function aplicarStatusDoAtaque(pokeAtacante: Pokemon, pokeDefensor: Pokemon, ataqueSelecionado: Ataques) {
+export function aplicarStatusDoAtaque(pokeAtacante: Pokemon, pokeDefensor: Pokemon, ataqueSelecionado: Ataques): string {
     let efeito: { statusAfetado: keyof StatusData, valor: number, alvo: string } = ataqueSelecionado.efeito;
     let valorDoEfeito: number = efeito.valor;
     let alvoDoEfeito: string = efeito.alvo;

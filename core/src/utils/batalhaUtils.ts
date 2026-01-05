@@ -1,5 +1,5 @@
 import { Pokemon, Tipos } from "../classes/pokemon";
-import { Ataques } from "../classes/attack";
+import { Ataques } from "../classes/ataque";
 import { PokemonData, StatusData } from "../interfaces/pokemonData";
 
 

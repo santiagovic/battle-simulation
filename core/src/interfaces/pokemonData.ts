@@ -1,4 +1,4 @@
-import { AtaqueData } from './attackData'
+import { AtaqueData } from './ataqueData'
 import { ItemData } from './itemData';
 
 export interface PokemonData {
@@ -11,7 +11,6 @@ export interface PokemonData {
     ataques: AtaqueData[];
     status: StatusData;
     natureza: NaturezaData;
-    habilidade: HabilidadeData;
     sprites: object;
     desmaiado: boolean;
     condicao?: CondicaoData;
@@ -19,20 +18,20 @@ export interface PokemonData {
 
 export interface NaturezaData {
     nome: string;
-    buffStatus?: {nome: keyof StatusData, valor: number};
-    nerfStatus?: {nome: keyof StatusData, valor: number};
+    buffStatus: keyof StatusData | null;
+    nerfStatus: keyof StatusData | null;
 }
 
 export interface TiposData {
     nome: string;
     symbol: string; //adicionar url dps
-    danoDobradoDe?: string[]; 
-    danoDobradoContra?: string[]; 
+    danoDobradoDe?: string[];
+    danoDobradoContra?: string[];
     metadeDanoDe?: string[];
     metadeDanoContra?: string[];
     SemDanoDe?: string[];
     SemDanoContra?: string[];
-    }
+}
 
 export interface StatusData {
     hp: number;
@@ -45,11 +44,6 @@ export interface StatusData {
 
 export interface CondicaoData {
     nome: string;
-    efeito: {nome: keyof StatusData, valor: number};
+    efeito: { nome: keyof StatusData, valor: number };
     turnosRestantes: number;
-}
-
-export interface HabilidadeData {
-    nome: string;
-    efeito: {nome: keyof StatusData, valor: number};
 }
