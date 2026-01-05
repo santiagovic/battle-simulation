@@ -1,4 +1,6 @@
-[
+import { TiposData } from "../interfaces/pokemonData";
+
+const arrayDeTipos = [
     {
         "nome": "normal",
         "danoDobradoDe": [
@@ -480,3 +482,5 @@
         "SemDanoContra": []
     }
 ]
+
+export const todosOsTipos: TiposData[] = arrayDeTipos as TiposData[];

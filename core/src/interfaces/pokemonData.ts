@@ -45,5 +45,6 @@ export interface StatusData {
 export interface CondicaoData {
     nome: string;
     efeito: { nome: keyof StatusData, valor: number };
-    turnosRestantes: number;
+    turnosRestantes: number | null;
+    volatil: boolean;
 }

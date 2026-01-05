@@ -1,4 +1,6 @@
-[
+import { NaturezaData } from '../interfaces/pokemonData'
+
+const arrayDeNaturezas = [
     {
         "nome": "resistente",
         "buffStatus": null,
@@ -125,3 +127,5 @@
         "nerfStatus": "spAttack"
     }
 ]
+
+export const ListaDeNaturezas: NaturezaData[] = arrayDeNaturezas as NaturezaData[]

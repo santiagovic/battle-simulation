@@ -127,12 +127,15 @@ export class Tipos {
 export class Condicao {
     nome: string;
     efeito: { nome: keyof StatusData, valor: number };
-    turnosRestantes: number;
+    turnosRestantes: number | null;
+    volatil: boolean;
+
 
     constructor(data: CondicaoData) {
         this.nome = data.nome;
         this.efeito = data.efeito;
         this.turnosRestantes = data.turnosRestantes;
+        this.volatil = data.volatil;
     }
 }
 
