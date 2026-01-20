@@ -44,7 +44,7 @@ export interface StatusData {
 
 export interface CondicaoData {
     nome: string;
-    efeito: { nome: keyof StatusData, valor: number };
+    efeitos: { nome: keyof StatusData | keyof AtaqueData, valor: number, probabilidade: number, tipoImune: TiposData["nome"] | null }[] | { metodo: string | null, probabilidade: number};
     turnosRestantes: number | null;
-    volatil: boolean;
+    volatil: boolean
 }

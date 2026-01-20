@@ -10,14 +10,16 @@ export class Batalha {
     itemUsado: Item;
     turno: number = 1;
     clima: string | null = null;
+    pokeTrocado: boolean = false;
 
-    constructor(pokemon: Pokemon, pokeInimigo: Pokemon, ataqueUsado: number, itemUsado: Item, turno: number, clima: string | null) {
+    constructor(pokemon: Pokemon, pokeInimigo: Pokemon, ataqueUsado: number, itemUsado: Item, turno: number, clima: string | null, pokeTrocado: boolean = false) {
         this.pokemon = pokemon;
         this.pokeInimigo = pokeInimigo;
         this.ataqueUsado = ataqueUsado;
         this.itemUsado = itemUsado;
         this.turno = turno;
         this.clima = clima;
+        this.pokeTrocado = pokeTrocado;
     }
 
     iniciarBatalha() {
@@ -32,8 +34,8 @@ export class Batalha {
 
     turnoAtual(atacante: Pokemon, defensor: Pokemon, ataqueUsado: number) {
 
-        //1: verifica quem ataca primeiro pela velocidade
-        const PrimeiroAtacante = PokeMaisVelozDoTurno(atacante, defensor);
+        //1: define quem ataca primeiro pela velocidade
+        const PrimeiroAtacante: Pokemon = PokeMaisVelozDoTurno(atacante, defensor);
 
         //2: verifica se atacante possui condicao e aplicar baseado na probabilidade
 
@@ -50,5 +52,13 @@ export class Batalha {
         //7: fim do turno e retorna ao menu de ações (?)
     }
 
+    sinalizarQuePokemonFoiTrocado() {
+        this.pokeTrocado = true;
+    }
 
+    removerCondicoesVolateis() {
+        if (this.pokemon.condicao && this.pokemon.condicao.volatil) {
+            this.pokemon.condicao.turnosRestantes = null;
+        }
+    }
 }

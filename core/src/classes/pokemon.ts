@@ -1,5 +1,7 @@
-import { NaturezaData, PokemonData, TiposData, StatusData, CondicaoData } from '../interfaces/pokemonData'
-import { ItemData } from '../interfaces/itemData'
+import { NaturezaData, PokemonData, TiposData, StatusData, CondicaoData } from '../interfaces/pokemonData';
+import { ItemData } from '../interfaces/itemData';
+import { AtaqueData } from '../interfaces/ataqueData';
+
 import { Ataques } from './ataque';
 import { Item } from './item'
 
@@ -71,7 +73,6 @@ export class Pokemon {
             return "O pokémon desmaiou."
             //criar e chamar metodo de encerrar batalha quando desmaiar
         }
-
     }
 
     usarItem() {
@@ -126,16 +127,15 @@ export class Tipos {
 
 export class Condicao {
     nome: string;
-    efeito: { nome: keyof StatusData, valor: number };
+    efeitos: { nome: keyof StatusData | keyof AtaqueData, valor: number, probabilidade: number, tipoImune: TiposData["nome"] | null }[] | { metodo: string | null, probabilidade: number };
     turnosRestantes: number | null;
-    volatil: boolean;
-
+    volatil: boolean
 
     constructor(data: CondicaoData) {
         this.nome = data.nome;
-        this.efeito = data.efeito;
+        this.efeitos = data.efeitos;
         this.turnosRestantes = data.turnosRestantes;
-        this.volatil = data.volatil;
+        this.volatil = data.volatil
     }
 }
 

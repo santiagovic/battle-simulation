@@ -1,78 +1,130 @@
 import { CondicaoData } from '../interfaces/pokemonData'
+import { turnosRestantesAleatorios, zeraTurnosSePokemonForTrocado } from '../utils/batalhaUtils'
+import { Batalha } from '../classes/batalha'
 
-const arrayDeCondicoes = [
+const arrayDeCondicoes: CondicaoData[] = [
   {
     "nome": "queimadura",
-    "efeito": {
+    "efeitos": [{
       "nome": "hp",
-      "valor": 0.9375
+      "valor": 0.9375,
+      "probabilidade": 1,
+      "tipoImune": "fire"
     },
+    {
+      "nome": "attack",
+      "valor": 0.5,
+      "probabilidade": 1,
+      "tipoImune": null
+    }],
     "turnosRestantes": null,
-    "volatil": false
+    "volatil": false,
   },
   {
     "nome": "paralisia",
-    "efeito": {
+    "efeitos": [{
       "nome": "speed",
-      "valor": 0.5
+      "valor": 0.5,
+      "probabilidade": 1,
+      "tipoImune": null
     },
+    {
+      "nome": "speed",
+      "valor": 0,
+      "probabilidade": 0.25,
+      "tipoImune": null
+    }],
     "turnosRestantes": null,
-    "volatil": false
+    "volatil": false,
   },
   {
     "nome": "envenenamento",
-    "efeito": {
+    "efeitos": [{
       "nome": "hp",
-      "valor": 0.875
-    },
+      "valor": 0.875,
+      "probabilidade": 1,
+      "tipoImune": null
+    }],
     "turnosRestantes": null,
-    "volatil": false
-  },
-  {
-    "nome": "envenenamento grave",
-    "efeito": {
-      "nome": "hp",
-      "valor": 0.9375
-    },
-    "turnosRestantes": null,
-    "volatil": false
+    "volatil": false,
   },
   {
     "nome": "sono",
-    "efeito": {
+    "efeitos": [{
       "nome": "speed",
-      "valor": 0
-    },
+      "valor": 0,
+      "probabilidade": 1,
+      "tipoImune": null
+    }],
     "turnosRestantes": 3,
-    "volatil": false
+    "volatil": false,
   },
   {
     "nome": "congelamento",
-    "efeito": {
+    "efeitos": [{
       "nome": "speed",
-      "valor": 0
-    },
+      "valor": 0,
+      "probabilidade": 0.8,
+      "tipoImune": null
+    }],
     "turnosRestantes": null,
-    "volatil": false
+    "volatil": false,
   },
   {
     "nome": "geladura",
-    "efeito": {
+    "efeitos": [{
       "nome": "hp",
-      "valor": 0.9375
-    },
+      "valor": 0.9375,
+      "probabilidade": 1,
+      "tipoImune": null
+    }],
     "turnosRestantes": null,
-    "volatil": false
+    "volatil": false,
   },
   {
     "nome": "sonolência",
-    "efeito": {
+    "efeitos": [{
       "nome": "defense",
-      "valor": 0.66
-    },
+      "valor": 0.66,
+      "probabilidade": 1,
+      "tipoImune": null,
+    }],
     "turnosRestantes": 4,
-    "volatil": false
-  }
+    "volatil": false,
+
+  },
+  {
+    "nome": "confusão",
+    "efeitos": {
+      "metodo": "atacar",
+      "probabilidade": 0.5,
+    },
+    "turnosRestantes": turnosRestantesAleatorios(),
+    "volatil": true,
+  },
+  {
+    "nome": "amedrontado",
+    "efeitos": [{
+      "nome": "speed",
+      "valor": 0,
+      "probabilidade": 1,
+      "tipoImune": null
+    }],
+    "turnosRestantes": 1,
+    "volatil": true,
+},
+{
+  "nome": "apaixonado",
+  "efeitos": [{
+    "nome":"precisao",
+    "valor": 0.5,
+    "probabilidade": 1,
+    "tipoImune": null
+  }],
+  "turnosRestantes": null,
+  "volatil": true
+}
+
 ]
 
 export const listaDeCondicoes: CondicaoData[] = arrayDeCondicoes as CondicaoData[]
