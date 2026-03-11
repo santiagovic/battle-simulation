@@ -3,13 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PokemonModule } from './pokemon/pokemon.module';
 import { ItemModule } from './item/item.module';
-import { BatalhaModule } from './batalha/batalha.module';
-import { BatalhaModule } from './batalha/batalha.module';
-import { ItemModule } from './item/item.module';
-import { PokemonModule } from './pokemon/pokemon.module';
+import { BattleModule } from './battle/battle.module';
 
 @Module({
-  imports: [PokemonModule, BatalhaModule, ItemModule],
+  imports: [PokemonModule, BattleModule, ItemModule],
   controllers: [AppController],
   providers: [AppService],
 })

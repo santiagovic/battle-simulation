@@ -1,69 +1,97 @@
-import { Pokemon, Tipos } from "../../src/pokemon/entities/pokemon.entity";
-import { Ataques } from "./entities/ataque.entity";
-import { PokemonData, StatusData } from "../shared/pokemon.types";
+import { Injectable } from '@nestjs/common';
+import { CreatePokemonDto } from './dto/create-pokemon.dto';
+import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 
+import { Pokemon } from "./entities/pokemon.entity";
+import { Type } from "./entities/types.entity";
+import { Attack } from "./entities/attack.entity";
+import { StatusData } from "../shared/types/pokemon.types";
 
-export function calcularResistencia(ataqueSelecionado: Ataques, tipoInimigo: Tipos[]): number {
-    let tipodoAtaque = ataqueSelecionado.tipo;
-    let multiplicador: number = 1
+@Injectable()
+export class PokemonService {
+    create(createPokemonDto: CreatePokemonDto) {
+        return 'This action adds a new pokémon';
+    }
 
-    for (let tipoDefensor of tipoInimigo) {
-        let nomeTipoDef = tipoDefensor.nome
+    findAll() {
+        return `This action returns all pokémon`;
+    }
 
-        if (tipodoAtaque.danoDobradoContra && tipodoAtaque.danoDobradoContra.includes(nomeTipoDef)) {
-            multiplicador *= 2
+    findOne(id: number) {
+        return `This action returns a #${id} pokémon`;
+    }
+
+    update(id: number, updatePokemonDto: UpdatePokemonDto) {
+        return `This action updates a #${id} pokémon`;
+    }
+
+    remove(id: number) {
+        return `This action removes a #${id} pokémon`;
+    }
+
+    calculateResistance(selectedAttack: Attack, enemyTypes: Type[]): number {
+        let attackType = selectedAttack.type;
+        let multiplier: number = 1;
+
+        for (let defenderType of enemyTypes) {
+            let defenderTypeName = defenderType.name;
+
+            if (attackType.doublesDamageAgainst && attackType.doublesDamageAgainst.includes(defenderTypeName)) {
+                multiplier *= 2;
+            }
+
+            if (attackType.halfDamageAgainst && attackType.halfDamageAgainst.includes(defenderTypeName)) {
+                multiplier *= 0.5;
+            }
+
+            if (attackType.noDamageAgainst && attackType.noDamageAgainst.includes(defenderTypeName)) {
+                multiplier *= 0;
+            }
         }
+        return multiplier;
+    }
 
-        if (tipodoAtaque.metadeDanoContra && tipodoAtaque.metadeDanoContra.includes(nomeTipoDef)) {
-            multiplicador *= 0.5
+
+    calculateCritical(criticalChance: number): number {
+        let randomNumber: number = Math.random() * 100;
+        return randomNumber < criticalChance ? 1.5 : 1;
+    }
+
+
+    subtractAttackerPP(selectedAttack: Attack): Number {
+        return selectedAttack.pp -= 1;
+    }
+
+
+    defineAttackDefenseStats(pokemonAttacker: Pokemon, pokemonDefender: Pokemon, selectedAttack: Attack): [number, number] {
+        return selectedAttack.category == 'physical'
+            ? [pokemonAttacker.status.attack, pokemonDefender.status.defense]
+            : [pokemonAttacker.status.spAttack, pokemonDefender.status.spDefense];
+    }
+
+    applyAttackEffect(pokemonAttacker: Pokemon, pokemonDefender: Pokemon, selectedAttack: Attack): string {
+        let effect: { affectedStatus: keyof StatusData, value: number, target: string } = selectedAttack.effect;
+        let effectValue: number = effect.value;
+        let effectTarget: string = effect.target;
+
+        if (effectTarget === 'user') {
+            pokemonAttacker.status[effect.affectedStatus] += effectValue;
+            return `Status de ${pokemonAttacker.status[effect.affectedStatus]} foi aumentado.`
         }
-
-        if (tipodoAtaque.SemDanoContra && tipodoAtaque.SemDanoContra.includes(nomeTipoDef)) {
-            multiplicador *= 0
+        else {
+            pokemonDefender.status[effect.affectedStatus] += effectValue;
+            return `Status de ${pokemonDefender.status[effect.affectedStatus]} foi ${effect.value < 0 ? 'diminuido' : 'aumentado'}.`
         }
     }
-    return multiplicador;
-}
 
-
-export function calcularCritico(chanceDoAtaque: number): number {
-    let numAleatorio: number = Math.random() * 100;
-    return numAleatorio < chanceDoAtaque ? 1.5 : 1
-}
-
-
-export function subtrairPPdoAtacante(ataqueSelecionado: Ataques): Number {
-    return ataqueSelecionado.pp -= 1
-}
-
-
-export function definirTiposdeAtkeDef(pokeAtacante: Pokemon, pokeDefensor: Pokemon, ataqueSelecionado: Ataques): [number, number] {
-
-    return ataqueSelecionado.categoria == 'physical' ? [pokeAtacante.status.attack, pokeDefensor.status.defense] : [pokeAtacante.status.spAttack, pokeDefensor.status.spDefense]
-
-}
-
-export function aplicarStatusDoAtaque(pokeAtacante: Pokemon, pokeDefensor: Pokemon, ataqueSelecionado: Ataques): string {
-    let efeito: { statusAfetado: keyof StatusData, valor: number, alvo: string } = ataqueSelecionado.efeito;
-    let valorDoEfeito: number = efeito.valor;
-    let alvoDoEfeito: string = efeito.alvo;
-
-    if (alvoDoEfeito === 'user') {
-        pokeAtacante.status[efeito.statusAfetado] += valorDoEfeito
-        return `Status de ${pokeAtacante.status[efeito.statusAfetado]} foi aumentado.`
+    checkTypeMatchSTAB(pokemonAttacker: Pokemon, selectedAttack: Attack): boolean {
+        return pokemonAttacker.type.some(type => type.name == selectedAttack.type.name);
     }
-    else {
-        pokeDefensor.status[efeito.statusAfetado] += valorDoEfeito
-        return `Status de ${pokeDefensor.status[efeito.statusAfetado]} foi ${efeito.valor < 0 ? 'diminuido' : 'aumentado'}.`
+
+    //((((2 * LEVEL / 5 + 2) * ATKSTAT * ATKPOWER / DEFSTAT) / 50) + 2) * STAB * WEAKNESS_RESISTANCE * CRITICAL * OTHER * (MARGIN / 100)
+
+    calculateDamage(pokemonAttacker: Pokemon, pokemonDefender: Pokemon, selectedAttack: Attack, atk: number, def: number, stab: number): number {
+        return ((((2 * pokemonAttacker.level / 5 + 2) * atk * selectedAttack.power / def) / 50) + 2) * stab * this.calculateCritical(selectedAttack.critical) * this.calculateResistance(selectedAttack, pokemonDefender.type);
     }
 }
 
-export function verificarIgualdadeDeTipoAtkePkm(pokeAtacante: Pokemon, ataqueSelecionado: Ataques): boolean {
-    return pokeAtacante.tipo.some(tipo => tipo.nome == ataqueSelecionado.tipo.nome)
-}
-
-//((((2 * LEVEL / 5 + 2) * ATKSTAT * ATKPOWER / DEFSTAT) / 50) + 2) * STAB * WEAKNESS_RESISTANCE * CRITICAL * OTHER * (MARGIN / 100)
-
-export function calcularDano(pokeAtacante: Pokemon, pokeDefensor: Pokemon, ataqueSelecionado: Ataques, atk: number, def: number, stab: number): number {
-    return ((((2 * pokeAtacante.level / 5 + 2) * atk * ataqueSelecionado.poder / def) / 50) + 2) * stab * calcularCritico(ataqueSelecionado.critico) * calcularResistencia(ataqueSelecionado, pokeDefensor.tipo);
-}

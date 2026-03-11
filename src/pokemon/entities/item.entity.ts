@@ -1,20 +1,20 @@
-import { ItemData } from "../../shared/item.types";
-import { StatusData, TiposData } from "../../shared/pokemon.types";
+import { ItemData } from "../../shared/types/item.types";
+import { StatusData } from "../../shared/types/pokemon.types";
 
 export class Item {
-    nome: string;
-    efeito: { statusAfetado: keyof StatusData, valor: number };
-    custo: number;
-    seguravel: boolean;
-    consumivel: boolean;
+    name: string;
+    effect: { affectedStatus: keyof StatusData, value: number };
+    cost: number;
+    holdable: boolean;
+    consumable: boolean;
     sprite: string;
 
     constructor(data: ItemData) {
-        this.nome = data.nome;
-        this.efeito = data.efeito;
-        this.custo = data.custo;
-        this.seguravel = data.seguravel;
-        this.consumivel = data.consumivel;
-        this.sprite = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${this.nome}.png`;
+        this.name = data.name;
+        this.effect = data.effect;
+        this.cost = data.cost;
+        this.holdable = data.holdable;
+        this.consumable = data.consumable;
+        this.sprite = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${this.name}.png`;
     }
 }

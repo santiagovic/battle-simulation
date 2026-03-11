@@ -1,141 +1,94 @@
-import { NaturezaData, PokemonData, TiposData, StatusData, CondicaoData } from '../../shared/pokemon.types';
-import { ItemData } from '../../shared/item.types';
-import { AtaqueData } from '../../shared/ataque.types';
+import { PokemonData, StatusData } from '../../shared/types/pokemon.types';
+import { ItemData } from '../../shared/types/item.types';
 
-import { Ataques } from './ataque.entity';
-import { Item } from './item.entity'
-
-import { verificarIgualdadeDeTipoAtkePkm, subtrairPPdoAtacante, definirTiposdeAtkeDef, aplicarStatusDoAtaque, calcularDano } from '../pokemon.service'
+import { Attack } from './attack.entity';
+import { Item } from './item.entity';
+import { Type } from './types.entity';
+import { Nature } from './nature.entity';
+import { Condition } from './condition.entity';
+import { PokemonService } from '../pokemon.service';
 
 
 export class Pokemon {
-    nome: string;
-    apelido: string;
+    name: string;
+    nickname: string;
     level: number;
-    itemSegurado: ItemData | null;
-    itemUsado: ItemData | null = null;
-    tipo: Tipos[];
-    ataques: Ataques[];
+    heldItem: ItemData | null;
+    usedItem: ItemData | null = null;
+    type: Type[];
+    attacks: Attack[];
     status: StatusData;
-    natureza: Natureza;
+    nature: Nature;
     sprites: object;
-    desmaiado: boolean = false;
-    condicao: Condicao | null = null;
+    fainted: boolean = false;
+    condition: Condition | null = null;
+    pokemonService: any;
 
     constructor(data: PokemonData) {
-        this.nome = data.nome;
-        this.apelido = data.apelido;
+        this.name = data.name;
+        this.nickname = data.nickname;
         this.level = data.level;
-        this.tipo = (Array.isArray(data.tipo) ? data.tipo : [data.tipo]).map(t => new Tipos(t));
-        this.ataques = (Array.isArray(data.ataques) ? data.ataques : [data.ataques]).map(a => new Ataques(a));
+        this.type = (Array.isArray(data.type) ? data.type : [data.type]).map(t => new Type(t));
+        this.attacks = (Array.isArray(data.attacks) ? data.attacks : [data.attacks]).map(a => new Attack(a));
         this.status = data.status;
-        this.natureza = new Natureza(data.natureza);
-        this.itemSegurado = data.itemSegurado ? new Item(data.itemSegurado) : null;
+        this.nature = new Nature(data.nature);
+        this.heldItem = data.heldItem ? new Item(data.heldItem) : null;
         this.sprites = data.sprites;
-        this.condicao = data.condicao ? new Condicao(data.condicao) : null;
+        this.condition = data.condition ? new Condition(data.condition) : null;
     }
 
-    atacar(posicaoDoAtaqueEscolhido: number, pokeDefensor: Pokemon) {
-        const ataqueSelecionado: Ataques | undefined = this.ataques.find(ataque => ataque.posicao === posicaoDoAtaqueEscolhido);
+    useAttack(chosenAttackPosition: number, pokemonDefender: Pokemon) {
+        const selectedAttack: Attack | undefined = this.attacks.find(attack => attack.position === chosenAttackPosition);
 
-        if (ataqueSelecionado) {
+        if (selectedAttack) {
             let atk: number;
             let def: number;
-            let categDoAtaque: string = ataqueSelecionado.categoria;
+            let attackCategory: string = selectedAttack.category;
 
-            if (ataqueSelecionado.pp > 0) {
-                subtrairPPdoAtacante(ataqueSelecionado);
+            if (selectedAttack.pp > 0) {
+                this.pokemonService.subtractAttackerPP(selectedAttack);
 
-                if (categDoAtaque === 'physical') {
+                if (attackCategory === 'physical') {
 
-                    [atk, def] = definirTiposdeAtkeDef(this, pokeDefensor, ataqueSelecionado);
+                    [atk, def] = this.pokemonService.defineAttackDefenseStats(this, pokemonDefender, selectedAttack);
 
-                    let tipoDoAtaqueIgualaoTipoPkm: boolean = verificarIgualdadeDeTipoAtkePkm(this, ataqueSelecionado);
-                    const stab: number = tipoDoAtaqueIgualaoTipoPkm == true ? 1.5 : 1
+                    let typeMatchForSTAB: boolean = this.pokemonService.checkTypeMatchSTAB(this, selectedAttack);
+                    const stab: number = typeMatchForSTAB == true ? 1.5 : 1;
 
-                    const dano: number = calcularDano(this, pokeDefensor, ataqueSelecionado, atk, def, stab);
-                    pokeDefensor.receberDano(dano) //calcular variavel do itemSegurado
+                    const damage: number = this.pokemonService.calculateDamage(this, pokemonDefender, selectedAttack, atk, def, stab);
+                    pokemonDefender.takeDamage(damage); //calcular variavel do heldItem
                 }
 
-                else if (categDoAtaque === 'status') {
-                    aplicarStatusDoAtaque(this, pokeDefensor, ataqueSelecionado);
+                else if (attackCategory === 'status') {
+                    this.pokemonService.applyAttackEffect(this, pokemonDefender, selectedAttack);
                 }
             }
         }
     }
 
-    receberDano(dano: number) {
-        this.status.hp -= dano
+    takeDamage(damage: number) {
+        this.status.hp -= damage;
 
         if (this.status.hp <= 0) {
-            this.desmaiado = true;
+            this.fainted = true;
             this.status.hp = 0;
             return "O pokémon desmaiou."
             //criar e chamar metodo de encerrar batalha quando desmaiar
         }
     }
 
-    usarItem() {
-        if (this.itemUsado) {
-            if (this.itemUsado.consumivel) {
-                const statusASerModificado: keyof StatusData = this.itemUsado.efeito.statusAfetado;
-                const valorDoEfeitodoItem: number = this.itemUsado.efeito.valor;
+    useItem() {
+        if (this.usedItem) {
+            if (this.usedItem.consumable) {
+                const statusToModify: keyof StatusData = this.usedItem.effect.affectedStatus;
+                const itemEffectValue: number = this.usedItem.effect.value;
 
-                this.status[statusASerModificado] += valorDoEfeitodoItem;
+                this.status[statusToModify] += itemEffectValue;
 
-                const nomeDoItem = this.itemUsado.nome
-                this.itemUsado = null;
-                return `Você usou 1 ${nomeDoItem}.`
+                const itemName = this.usedItem.name;
+                this.usedItem = null;
+                return `Você usou 1 ${itemName}.`
             }
         }
     }
 }
-
-export class Natureza {
-    nome: string;
-    buffStatus: keyof StatusData | null;
-    nerfStatus: keyof StatusData | null;
-
-    constructor(data: NaturezaData) {
-        this.nome = data.nome;
-        this.buffStatus = data.buffStatus;
-        this.nerfStatus = data.nerfStatus;
-    }
-}
-
-export class Tipos {
-    nome: string;
-    symbol: string;
-    danoDobradoDe?: string[];
-    danoDobradoContra?: string[];
-    metadeDanoDe?: string[];
-    metadeDanoContra?: string[];
-    SemDanoDe?: string[];
-    SemDanoContra?: string[];
-
-    constructor(data: TiposData) {
-        this.nome = data.nome
-        this.symbol = data.symbol
-        this.danoDobradoDe = data.danoDobradoDe;
-        this.danoDobradoContra = data.danoDobradoContra;
-        this.metadeDanoDe = data.metadeDanoDe;
-        this.metadeDanoContra = data.metadeDanoContra;
-        this.SemDanoDe = data.SemDanoDe;
-        this.SemDanoContra = data.SemDanoContra;
-    }
-}
-
-export class Condicao {
-    nome: string;
-    efeitos: { nome: keyof StatusData | keyof AtaqueData, valor: number, probabilidade: number, tipoImune: TiposData["nome"] | null }[] | { metodo: string | null, probabilidade: number };
-    turnosRestantes: number | null;
-    volatil: boolean
-
-    constructor(data: CondicaoData) {
-        this.nome = data.nome;
-        this.efeitos = data.efeitos;
-        this.turnosRestantes = data.turnosRestantes;
-        this.volatil = data.volatil
-    }
-}
-
