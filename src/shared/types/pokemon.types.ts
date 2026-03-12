@@ -16,7 +16,6 @@ export interface PokemonData {
     sprites: object;
     fainted: boolean;
     condition?: ConditionData;
-    pokemonService?: any;
 }
 
 export interface NatureData {

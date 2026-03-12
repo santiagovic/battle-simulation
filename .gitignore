@@ -3,6 +3,9 @@
 /node_modules
 /build
 
+#claude agent
+/.claude
+
 # Logs
 logs
 *.log

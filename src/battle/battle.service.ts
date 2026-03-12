@@ -5,9 +5,14 @@ import { CreateBattleDto } from './dto/create-battle.dto';
 import { UpdateBattleDto } from './dto/update-battle.dto';
 import { Condition } from 'src/pokemon/entities/condition.entity';
 import { StatusData } from 'src/shared/types/pokemon.types';
+import { PokemonService } from 'src/pokemon/pokemon.service';
+import { Attack } from 'src/pokemon/entities/attack.entity';
 
 @Injectable()
 export class BattleService {
+    //injeção de dependências
+    constructor(private pokemonService: PokemonService){}
+
     create(createBattleDto: CreateBattleDto) {
         return 'This action adds a new battle';
     }
@@ -39,15 +44,16 @@ export class BattleService {
         const volatileRoll = Math.random();
     
         if (Array.isArray(condition.effects)) {
+
+            //apaixonado
+            if (condition.name === "apaixonado") {
+                pokemon.condition = {...condition,
+                remainingTurns: this.resetTurnsIfPokemonSwapped(battle)
+                };
+            }  
+
             for (let effect of condition.effects) {
                 let randomNumber: number = Math.random();
-
-                //apaixonado
-                if (condition.name === "apaixonado") {
-                    pokemon.condition = {...condition,
-                    remainingTurns: this.resetTurnsIfPokemonSwapped(battle)
-                    };
-                }
 
                 if (randomNumber < effect.probability) {
                     if (effect.name in pokemon.status) {
@@ -64,7 +70,6 @@ export class BattleService {
                 remainingTurns: this.randomRemainingTurns() //calcula na hora
             }
         }
-
 
         //outras condições
         else if (volatileRoll < condition.effects.probability) {
@@ -86,7 +91,6 @@ export class BattleService {
         return battle.pokemonSwapped ? 0 : null;
     }
 
-
     startBattle() {
         //texto inicial talvez
 
@@ -97,15 +101,19 @@ export class BattleService {
         //3 - chamar metodo turno atual pela primeira vez
     }
 
-    currentTurn(battle: Battle, attacker: Pokemon, defender: Pokemon, attackUsed: number) {
+    currentTurn(battle: Battle, attackUsed: Attack) {
 
         //1: define quem ataca primeiro pela velocidade
-        const firstAttacker: Pokemon = this.FastestPokemonInTurn(attacker, defender);
+        const firstAttacker: Pokemon = this.FastestPokemonInTurn(battle.pokemon, battle.enemyPokemon);
+        const firstDefender: Pokemon = firstAttacker === battle.pokemon ? battle.enemyPokemon : battle.pokemon
 
         //2: verifica se atacante possui condicao e aplicar baseado na probabilidade
+        if (firstAttacker.condition) {
+            this.applyCondition(battle, firstAttacker, firstAttacker.condition);
+        }
 
         //3: atacar
-        firstAttacker.useAttack(attackUsed, defender);
+        this.pokemonService.useAttack(firstAttacker, attackUsed, firstDefender);
 
         //4: defensor usa metodo receber dano
 

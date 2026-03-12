@@ -6,6 +6,7 @@ import { Pokemon } from "./entities/pokemon.entity";
 import { Type } from "./entities/types.entity";
 import { Attack } from "./entities/attack.entity";
 import { StatusData } from "../shared/types/pokemon.types";
+import { Item } from './entities/item.entity';
 
 @Injectable()
 export class PokemonService {
@@ -53,13 +54,13 @@ export class PokemonService {
 
 
     calculateCritical(criticalChance: number): number {
-        let randomNumber: number = Math.random() * 100;
+        let randomNumber: number = Math.random();
         return randomNumber < criticalChance ? 1.5 : 1;
     }
 
 
-    subtractAttackerPP(selectedAttack: Attack): Number {
-        return selectedAttack.pp -= 1;
+    subtractAttackerPP(selectedAttack: Attack): void {
+        selectedAttack.pp -= 1;
     }
 
 
@@ -89,9 +90,73 @@ export class PokemonService {
     }
 
     //((((2 * LEVEL / 5 + 2) * ATKSTAT * ATKPOWER / DEFSTAT) / 50) + 2) * STAB * WEAKNESS_RESISTANCE * CRITICAL * OTHER * (MARGIN / 100)
-
     calculateDamage(pokemonAttacker: Pokemon, pokemonDefender: Pokemon, selectedAttack: Attack, atk: number, def: number, stab: number): number {
         return ((((2 * pokemonAttacker.level / 5 + 2) * atk * selectedAttack.power / def) / 50) + 2) * stab * this.calculateCritical(selectedAttack.critical) * this.calculateResistance(selectedAttack, pokemonDefender.type);
     }
+
+    executePhysicalAttack(pokemonAttacker: Pokemon, pokemonDefender: Pokemon, selectedAttack: Attack) {
+        let atk: number;
+        let def: number;
+
+        [atk, def] = this.defineAttackDefenseStats(pokemonAttacker, pokemonDefender, selectedAttack);
+
+        let typeMatchForSTAB: boolean = this.checkTypeMatchSTAB(pokemonAttacker, selectedAttack);
+        const stab: number = typeMatchForSTAB == true ? 1.5 : 1;
+
+        const damage: number = this.calculateDamage(pokemonAttacker, pokemonDefender, selectedAttack, atk, def, stab);
+        this.takeDamage(pokemonDefender, damage); //calcular variavel do heldItem
+    }
+
+    useAttack(pokemonAttacker: Pokemon, selectedAttack: Attack, pokemonDefender: Pokemon) {
+        if (selectedAttack) {
+            let attackCategory: string = selectedAttack.category;
+
+            if (selectedAttack.pp > 0) {
+                this.subtractAttackerPP(selectedAttack);
+
+                if (attackCategory === 'physical') {
+                    this.executePhysicalAttack(pokemonAttacker, pokemonDefender, selectedAttack)
+                }
+
+                else if (attackCategory === 'status') {
+                    this.applyAttackEffect(pokemonAttacker, pokemonDefender, selectedAttack);
+                }
+            }
+        }
+    }
+
+    //undefined para prevenir que retorne zero ataques, erro silencioso
+    defineRandomAttackByNPC(pokemonAttacker: Pokemon): Attack | undefined {
+        const availableAttacks: Attack[] = pokemonAttacker.attacks.filter(attack => attack.pp > 0);
+        const randomIndex: number = Math.floor(Math.random() * availableAttacks.length)
+        return availableAttacks[randomIndex]
+    }
+
+    takeDamage(pokemonDefender: Pokemon, damage: number) {
+        pokemonDefender.status.hp -= damage;
+
+        if (pokemonDefender.status.hp <= 0) {
+            pokemonDefender.fainted = true;
+            pokemonDefender.status.hp = 0;
+            return "O pokémon desmaiou."
+            //criar e chamar metodo de encerrar batalha quando desmaiar
+        }
+    }
+
+    useItem(pokemonAttacker: Pokemon) {
+        if (pokemonAttacker.usedItem) {
+            if (pokemonAttacker.usedItem.consumable) {
+                const statusToModify: keyof StatusData = pokemonAttacker.usedItem.effect.affectedStatus;
+                const itemEffectValue: number = pokemonAttacker.usedItem.effect.value;
+
+                pokemonAttacker.status[statusToModify] += itemEffectValue;
+
+                const itemName = pokemonAttacker.usedItem.name;
+                pokemonAttacker.usedItem = null;
+                return `Você usou 1 ${itemName}.`
+            }
+        }
+    }
 }
+
 
