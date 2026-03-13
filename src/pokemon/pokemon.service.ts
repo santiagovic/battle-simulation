@@ -85,25 +85,21 @@ export class PokemonService {
         }
     }
 
-    checkTypeMatchSTAB(pokemonAttacker: Pokemon, selectedAttack: Attack): boolean {
-        return pokemonAttacker.type.some(type => type.name == selectedAttack.type.name);
+    calculateSTAB(pokemonAttacker: Pokemon, selectedAttack: Attack): number{
+        const typeMatch = pokemonAttacker.type.some(type => type.name == selectedAttack.type.name);
+
+        return typeMatch ? 1.5 : 1;
     }
 
     //((((2 * LEVEL / 5 + 2) * ATKSTAT * ATKPOWER / DEFSTAT) / 50) + 2) * STAB * WEAKNESS_RESISTANCE * CRITICAL * OTHER * (MARGIN / 100)
-    calculateDamage(pokemonAttacker: Pokemon, pokemonDefender: Pokemon, selectedAttack: Attack, atk: number, def: number, stab: number): number {
-        return ((((2 * pokemonAttacker.level / 5 + 2) * atk * selectedAttack.power / def) / 50) + 2) * stab * this.calculateCritical(selectedAttack.critical) * this.calculateResistance(selectedAttack, pokemonDefender.type);
+    calculateDamage(pokemonAttacker: Pokemon, pokemonDefender: Pokemon, selectedAttack: Attack): number {
+        const [atk, def] = this.defineAttackDefenseStats(pokemonAttacker, pokemonDefender, selectedAttack);
+
+        return ((((2 * pokemonAttacker.level / 5 + 2) * atk * selectedAttack.power / def) / 50) + 2) * this.calculateSTAB(pokemonAttacker, selectedAttack) * this.calculateCritical(selectedAttack.critical) * this.calculateResistance(selectedAttack, pokemonDefender.type);
     }
 
     executePhysicalAttack(pokemonAttacker: Pokemon, pokemonDefender: Pokemon, selectedAttack: Attack) {
-        let atk: number;
-        let def: number;
-
-        [atk, def] = this.defineAttackDefenseStats(pokemonAttacker, pokemonDefender, selectedAttack);
-
-        let typeMatchForSTAB: boolean = this.checkTypeMatchSTAB(pokemonAttacker, selectedAttack);
-        const stab: number = typeMatchForSTAB == true ? 1.5 : 1;
-
-        const damage: number = this.calculateDamage(pokemonAttacker, pokemonDefender, selectedAttack, atk, def, stab);
+        const damage: number = this.calculateDamage(pokemonAttacker, pokemonDefender, selectedAttack);
         this.takeDamage(pokemonDefender, damage); //calcular variavel do heldItem
     }
 
@@ -155,6 +151,14 @@ export class PokemonService {
                 pokemonAttacker.usedItem = null;
                 return `Você usou 1 ${itemName}.`
             }
+        }
+    }
+
+    calculateRemainingTurnsOfCondition(pokemon: Pokemon): string | null {
+        if (pokemon.condition?.remainingTurns !== null && pokemon.condition.remainingTurns! > 0) {
+            pokemon.condition.remainingTurns!-- 
+            
+            return pokemon.condition === null ? `${pokemon.name} não está mais ${pokemon.condition.name}.` : null
         }
     }
 }

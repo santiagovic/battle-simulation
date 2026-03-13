@@ -101,13 +101,14 @@ export class BattleService {
         //3 - chamar metodo turno atual pela primeira vez
     }
 
-    currentTurn(battle: Battle, attackUsed: Attack) {
+    firstTurn(battle: Battle, attackUsed: Attack) {
 
         //1: define quem ataca primeiro pela velocidade
         const firstAttacker: Pokemon = this.FastestPokemonInTurn(battle.pokemon, battle.enemyPokemon);
         const firstDefender: Pokemon = firstAttacker === battle.pokemon ? battle.enemyPokemon : battle.pokemon
 
         //2: verifica se atacante possui condicao e aplicar baseado na probabilidade
+        //aqui preciso trocar o aplly condition para outro metodo que valida condições que impendem o ataque, como paralisia, sono, etc. criar uma propriedade na condição para mapear, como tipo bloqueante ou continua
         if (firstAttacker.condition) {
             this.applyCondition(battle, firstAttacker, firstAttacker.condition);
         }
@@ -116,23 +117,37 @@ export class BattleService {
         this.pokemonService.useAttack(firstAttacker, attackUsed, firstDefender);
 
         //4: defensor usa metodo receber dano
+        this.pokemonService.takeDamage(firstDefender, this.pokemonService.calculateDamage(firstAttacker, firstDefender, attackUsed));
 
-        //5: defensor ataca
+        //5: fim do turno, verifica se alguem desmaiou
+        this.verifyDefeat(battle);
 
-        //6: atacante recebe dano
+        //6: aplica condições que sempre afetam o pokemon no final do turno, como queimadura, veneno, etc. criar uma propriedade na condição para mapear (bloqueante x continua)
 
-        //7: fim do turno e retorna ao menu de a��es (?)
-    }
+        //7: recalcula e reseta condições temporarias se zerar
+        this.pokemonService.calculateRemainingTurnsOfCondition(firstAttacker);
+        
+        //8: chama o segundo turno para inverter os pokemons
+        this.secondTurn(firstAttacker, firstDefender) 
+        //refatorar logica do turno pra evitar duplicidade de codigo
+}
 
     flagPokemonSwapped(battle: Battle): void {
         battle.pokemonSwapped = true;
     }
 
-    removeVolatileConditions(battle: Battle): void {
-        if (battle.pokemon.condition && battle.pokemon.condition.volatile) {
-            battle.pokemon.condition.remainingTurns = null;
-        }
+    verifyDefeat(battle: Battle): boolean {
+        return battle.pokemon.fainted || battle.enemyPokemon.fainted;
     }
+
+    secondTurn(firstAttacker: Pokemon, firstDefender: Pokemon) {
+        const secondAttacker: Pokemon = firstDefender;
+        const secondDeffender: Pokemon = firstAttacker;
+    
+    
+    
+    }
+    
 
 
 }

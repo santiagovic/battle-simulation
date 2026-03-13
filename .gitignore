@@ -5,6 +5,7 @@
 
 #claude agent
 /.claude
+/.github
 
 # Logs
 logs
